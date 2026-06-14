@@ -61,14 +61,6 @@ export default defineConfig({
             { label: 'משימה ראשונה', link: '/alpha/first-ticket/' },
           ],
         },
-        {
-          label: 'למנטור',
-          items: [
-            { label: 'מדריך המנטור', link: '/mentor/guide/' },
-            { label: 'נקודות בקרה', link: '/mentor/checkpoints/' },
-            { label: 'מחווני הערכה', link: '/mentor/rubrics/' },
-          ],
-        },
       ],
     }),
   ],
