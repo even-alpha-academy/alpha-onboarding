@@ -1,0 +1,59 @@
+---
+// Lightweight self-check. Reveals the answer + explanation on selection.
+// Usage (.mdx):
+//   <Quiz question="..." options={[{text:"א", correct:true},{text:"ב"}]} explanation="..." />
+interface Option { text: string; correct?: boolean; }
+interface Props { question: string; options: Option[]; explanation?: string; }
+const { question, options, explanation } = Astro.props;
+---
+
+<div class="quiz">
+  <p class="q"><strong>בדיקה עצמית:</strong> {question}</p>
+  <ul>
+    {options.map((o) => (
+      <li>
+        <button type="button" data-correct={o.correct ? '1' : '0'}>{o.text}</button>
+      </li>
+    ))}
+  </ul>
+  {explanation && <p class="explain" hidden set:html={explanation} />}
+</div>
+
+<style>
+  .quiz {
+    margin: 1.25rem 0; padding: 0.9rem 1rem;
+    border: 1px solid var(--sl-color-gray-5); border-radius: 0.5rem;
+    background: var(--sl-color-gray-6);
+  }
+  .quiz .q { margin: 0 0 0.6rem; }
+  .quiz ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem; }
+  .quiz button {
+    width: 100%; text-align: start; padding: 0.5rem 0.75rem;
+    border: 1px solid var(--sl-color-gray-4); border-radius: 0.4rem;
+    background: var(--sl-color-black); color: inherit; cursor: pointer; font: inherit;
+  }
+  .quiz button:hover { border-color: var(--sl-color-accent); }
+  .quiz button.right { border-color: #2ea043; background: rgba(46,160,67,0.15); }
+  .quiz button.wrong { border-color: #d1242f; background: rgba(209,36,47,0.12); }
+  .quiz .explain {
+    margin: 0.7rem 0 0; padding-top: 0.6rem;
+    border-top: 1px solid var(--sl-color-gray-5); font-size: 0.95rem;
+  }
+</style>
+
+<script>
+  function initQuizzes() {
+    document.querySelectorAll<HTMLElement>('.quiz').forEach((quiz) => {
+      const explain = quiz.querySelector<HTMLElement>('.explain');
+      quiz.querySelectorAll<HTMLButtonElement>('button').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const correct = btn.dataset.correct === '1';
+          btn.classList.add(correct ? 'right' : 'wrong');
+          if (correct && explain) explain.hidden = false;
+        });
+      });
+    });
+  }
+  initQuizzes();
+  document.addEventListener('astro:after-swap', initQuizzes);
+</script>

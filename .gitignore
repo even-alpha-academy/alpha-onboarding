@@ -1,0 +1,19 @@
+# --- Starlight site build artifacts ---
+site/node_modules/
+site/dist/
+site/.astro/
+npm-debug.log*
+
+# --- author/build meta — not part of the published program ---
+SPEC.md
+OPUS-PROMPT.md
+
+# --- legacy pre-website markdown (superseded by site/src/content/docs/) ---
+# kept on disk for reference, not published.
+/מסמכים/
+/מנטור/
+/לוח-זמנים.md
+
+# --- OS ---
+.DS_Store
+Thumbs.db

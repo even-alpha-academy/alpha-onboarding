@@ -1,0 +1,68 @@
+---
+// Interactive, localStorage-persisted checklist.
+// Usage (in .mdx):  <Checklist id="setup-day0" items={["...","..."]} />
+interface Props {
+  id: string;
+  items: string[];
+}
+const { id, items } = Astro.props;
+---
+
+<ul class="checklist" data-checklist={id}>
+  {items.map((item, i) => (
+    <li>
+      <label>
+        <input type="checkbox" data-idx={i} />
+        <span set:html={item} />
+      </label>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .checklist {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  .checklist li {
+    margin: 0;
+    border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist label {
+    display: flex;
+    gap: 0.65rem;
+    align-items: flex-start;
+    padding: 0.6rem 0.85rem;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .checklist label:hover { background: var(--sl-color-gray-6); }
+  .checklist input { margin-top: 0.25rem; flex-shrink: 0; width: 1.05em; height: 1.05em; }
+  .checklist input:checked + span { color: var(--sl-color-gray-3); text-decoration: line-through; }
+</style>
+
+<script>
+  function initChecklists() {
+    document.querySelectorAll<HTMLElement>('[data-checklist]').forEach((list) => {
+      const key = 'checklist:' + list.dataset.checklist;
+      let saved: Record<string, boolean> = {};
+      try { saved = JSON.parse(localStorage.getItem(key) || '{}'); } catch {}
+      const boxes = list.querySelectorAll<HTMLInputElement>('input[type=checkbox]');
+      boxes.forEach((box) => {
+        const idx = box.dataset.idx!;
+        box.checked = !!saved[idx];
+        box.addEventListener('change', () => {
+          saved[idx] = box.checked;
+          localStorage.setItem(key, JSON.stringify(saved));
+        });
+      });
+    });
+  }
+  initChecklists();
+  document.addEventListener('astro:after-swap', initChecklists);
+</script>

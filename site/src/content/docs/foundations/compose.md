@@ -1,0 +1,110 @@
+---
+title: "Compose למפתחי React"
+---
+
+זה הגשר החזק ביותר שלכם: Jetpack Compose **הוא** המודל המנטלי של React, כתוב ב-Kotlin. אם אתם חושבים ב-React, אתם כבר חושבים ב-Compose — נשאר ללמוד את התחביר ואת המקומות הבודדים שבהם האנלוגיה דולפת. אחרי המסמך הזה תוכלו להיות פרודוקטיביים ב-UI כמעט מיד.
+
+## טבלת התרגום
+
+| React | Compose | הסתייגות בשורה אחת |
+|---|---|---|
+| component function | `@Composable fun` | מתחיל באות גדולה לפי מוסכמה |
+| re-render | recomposition | רץ מחדש רק מה שתלוי ב-state שהשתנה |
+| `useState` | `remember { mutableStateOf(x) }` | `remember` שורד recomposition, לא סיבוב מסך |
+| props | פרמטרים של הפונקציה | רגיל לגמרי |
+| children | trailing lambda (slot API) | `content: @Composable () -> Unit` |
+| `useEffect` | `LaunchedEffect(key)` / `DisposableEffect` | רץ בתוך coroutine scope |
+| `key` ברשימה | `key(id) { ... }` | אותו תפקיד — זהות יציבה |
+| context | `CompositionLocal` | להעברת ערכים במורד העץ בלי props |
+| `React.memo` | skipping (stability) | אוטומטי כשהפרמטרים יציבים |
+| רינדור מותנה | `if` רגיל | זה פשוט Kotlin |
+
+## מה באמת שונה
+
+האנלוגיה דולפת בכמה מקומות — בכנות:
+
+- **אין virtual DOM.** במקום diffing, Compose משתמש ב-memoization מבוסס-מיקום: הוא זוכר מה כל קריאה ייצרה לפי **מיקומה בקוד**. לכן "סדר הקריאות חשוב" — אל תקראו ל-composables בתוך `if` באופן שמשנה כמה מהם נקראים בלי `key`.
+- **State hoisting היא מוסכמה שהצוות אוכף.** composables הם **stateless**, וה-state מגיע מה-ViewModel. זה בדיוק דפוס ה-`_state`/`state` מהמסמך הקודם: ה-composable מקבל ערכים ומפלט אירועים, לא מחזיק state משלו.
+- **scope של recomposition.** הפונקציה **רצה מחדש** — אל תעשו עבודה (קריאות רשת, חישוב כבד) ישירות בגוף ה-composable. לשם כך יש `LaunchedEffect` (עבודה אסינכרונית) ו-`remember` (לזכור תוצאה בין recompositions).
+- **Modifiers.** `Modifier` מאחד את מה שב-React היה `className` + `style` + event handlers. **הסדר חשוב** — `padding().background()` שונה מ-`background().padding()`.
+
+```kotlin
+@Composable
+fun Greeting(name: String, onClick: () -> Unit) {   // stateless: props נכנסים, event יוצא
+    Text(
+        text = "שלום $name",
+        modifier = Modifier
+            .clickable { onClick() }
+            .padding(16.dp),
+    )
+}
+```
+
+## פרימיטיבים של layout
+
+המודל הוא flexbox:
+
+- **`Column`** / **`Row`** ↔ `flex-direction: column / row`.
+- **`Box`** ↔ מיקום שכבות זו על זו (stacking).
+- **`Spacer`** ↔ רווח מפורש.
+- **`Modifier.weight(1f)`** ↔ `flex-grow`.
+- **`LazyColumn`** ↔ רשימה וירטואלית (כמו `FlatList`) — מרנדר רק את מה שגלוי.
+
+```kotlin
+LazyColumn {
+    items(areas) { area -> TrainingAreaCard(area) }
+}
+```
+
+**Scaffold ו-Material3:** `Scaffold` נותן מבנה מסך (top bar, content, וכו'). ה-theming מוגדר ב-`Theme.kt` ונצרך דרך `MaterialTheme.colorScheme` / `MaterialTheme.typography`. באלפא ה-theme יושב ב-`app/src/main/java/com/even/alpha/core/ui/theme/` (`Theme.kt`, `Color.kt`, `Type.kt`), ורכיבים משותפים ב-`app/src/main/java/com/even/alpha/core/ui/components/`.
+
+## State בפועל
+
+הנה החיבור בין מסמך ה-coroutines ל-UI: composable צורך `StateFlow` של ViewModel דרך `collectAsState()` (או `collectAsStateWithLifecycle()` שמכבד את ה-lifecycle):
+
+```kotlin
+@Composable
+fun SettingsRoute(vm: SettingsViewModel) {
+    val state by vm.state.collectAsState()      // כל עדכון state → recomposition
+    Settings(displayName = state.displayName, onLogout = vm::logout)
+}
+```
+
+אירועים זורמים **למעלה** דרך lambdas (`vm::logout`) — בדיוק האינסטינקט החד-כיווני מ-React+Redux. זו בדיוק התבנית מ-`SettingsScreen.kt` בקוד האמיתי.
+
+## כלים
+
+- **`@Preview`** — כמו Storybook בתוך ה-IDE: מרנדר composable בלי להריץ את האפליקציה. תכתבו preview לכל מצב.
+- **Layout Inspector** ו-**recomposition counts** — לדיבוג; דעו שהם קיימים.
+
+## קריאת חובה
+
+ה-[Compose pathway](https://developer.android.com/courses/jetpack-compose/course) ב-developer.android.com, ובמיוחד:
+
+- [Thinking in Compose](https://developer.android.com/develop/ui/compose/mental-model) — ממופה אחד-לאחד ל-"Thinking in React". קראו אותו עם הכובע הזה.
+- [State and Jetpack Compose](https://developer.android.com/develop/ui/compose/state)
+- [Lifecycle of composables](https://developer.android.com/develop/ui/compose/lifecycle) ו-[Side effects](https://developer.android.com/develop/ui/compose/side-effects)
+
+## תרגיל
+
+בפרויקט scratch (או בארגז החול של ה-UI בריפו פרויקט הגמר), בנו composable של **"כרטיס שטח אימון"**:
+
+- שם השטח, ו-chip של סטטוס שצבעו נקבע לפי הסטטוס (פנוי/תפוס/בשיפוץ).
+- שורת דירוג של כוכבים (1–5).
+- lambda של `onClick`.
+- **stateless** לחלוטין.
+- `@Preview` לשלושה מצבים שונים.
+
+אחר כך עטפו `LazyColumn` של 50 כרטיסים מדומים. לבסוף: **הרימו (hoist)** את ה-state של "הכרטיס הנבחר" אל הקורא, והציגו פאנל פירוט.
+
+**הגדרת סיום:**
+- אפס state בתוך ה-composable של הכרטיס.
+- ה-previews מתרנדרים.
+- אתם יכולים לענות "מה גורם לרקומפוזיציה כאן".
+
+(התרגיל הזה מקדים בכוונה את ה-UI של רשימת השטחים בפרויקט הגמר — תעשו אותו שוב שם, אבל אמיתי.)
+
+## למעבר הלאה
+
+המשיכו אל [MVVM ו-Koin](/alpha-onboarding/foundations/mvvm-koin/) — הארכיטקטורה המדויקת של הצוות, שמולה ייבדק פרויקט הגמר.
+

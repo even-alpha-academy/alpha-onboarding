@@ -1,0 +1,60 @@
+---
+// Visual of the AI usage-modes ladder. Static; inherits RTL from <html dir="rtl">.
+const modes = [
+  {
+    name: 'Explainer',
+    when: 'מותר תמיד, מיום 1',
+    desc: 'מסביר קוד, מושג, או שגיאה. מאיץ הלמידה הטוב ביותר.',
+    state: 'open',
+  },
+  {
+    name: 'Navigator',
+    when: 'משלב 2',
+    desc: 'מאתר דברים ומשרטט גישה — אתם כותבים את הקוד ומגנים על כל שורה.',
+    state: 'open',
+  },
+  {
+    name: 'Generator',
+    when: 'בשערים בלבד',
+    desc: 'כותב קוד שאתם סוקרים ומחזיקים באחריות. נרכש, לא ניתן.',
+    state: 'gated',
+  },
+];
+---
+
+<ol class="mode-ladder">
+  {modes.map((m, i) => (
+    <li class={m.state}>
+      <span class="rung">{i + 1}</span>
+      <div class="body">
+        <div class="head">
+          <strong>{m.name}</strong>
+          <span class="when">{m.when}</span>
+          {m.state === 'gated' && <span class="lock" title="נפתח בשער">🔒</span>}
+        </div>
+        <p>{m.desc}</p>
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .mode-ladder { list-style: none; padding: 0; margin: 1.25rem 0; display: grid; gap: 0.6rem; }
+  .mode-ladder li {
+    display: flex; gap: 0.85rem; align-items: stretch;
+    border: 1px solid var(--sl-color-gray-5);
+    border-inline-start: 4px solid var(--sl-color-accent);
+    border-radius: 0.5rem; padding: 0.7rem 0.9rem;
+  }
+  .mode-ladder li.gated { border-inline-start-color: var(--sl-color-orange); opacity: 0.95; }
+  .rung {
+    flex-shrink: 0; width: 1.9rem; height: 1.9rem; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 700;
+    background: var(--sl-color-accent-low); color: var(--sl-color-accent-high);
+  }
+  .gated .rung { background: var(--sl-color-orange-low); color: var(--sl-color-orange-high); }
+  .body { display: grid; gap: 0.15rem; }
+  .head { display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap; }
+  .when { font-size: 0.8rem; color: var(--sl-color-gray-3); }
+  .mode-ladder p { margin: 0; font-size: 0.95rem; }
+</style>

@@ -1,0 +1,34 @@
+---
+title: חפיפת צוות אלפא
+description: חפיפה אינטראקטיבית להצטרפות לצוות אלפא — מאפס אנדרואיד עד משימה אמיתית.
+template: splash
+hero:
+  tagline: מאפס ידע באנדרואיד עד עבודה על משימה אמיתית בקוד של הצוות — 20–26 ימי עבודה, בקצב שלך.
+  actions:
+    - text: בואו נתחיל
+      link: /alpha-onboarding/welcome/
+      icon: right-arrow
+      variant: primary
+    - text: לוח הזמנים
+      link: /alpha-onboarding/schedule/
+      icon: open-book
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid stagger>
+  <Card title="גשר ממה שאתה כבר יודע" icon="seti:typescript">
+    רוב המסמכים מתרגמים את TypeScript / React / NestJS שלך לעולם האנדרואיד — Compose מול React,
+    Koin מול ה-DI של Nest, coroutines מול promises.
+  </Card>
+  <Card title="AI ככלי מקצועי" icon="sparkles">
+    סולם המצבים — Explainer, Navigator, Generator — מלווה את כל התוכנית. דרגת Generator נרכשת, לא ניתנת.
+  </Card>
+  <Card title="כל שלב נגמר בשער" icon="approve-check">
+    קריטריוני יציאה ברורים, התקדמות לפי יכולת ולא לפי לוח שנה, וכל feature נגמר ב-MR עם ביקורת אמיתית.
+  </Card>
+  <Card title="פרויקט הגמר" icon="rocket">
+    בונים אפליקציית אנדרואיד אמיתית («תרגול») מול backend שבניתם — התחברות, מפה תלת-ממדית, ותיעוד תרגולים.
+  </Card>
+</CardGrid>

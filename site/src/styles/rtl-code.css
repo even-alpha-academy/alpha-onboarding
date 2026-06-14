@@ -1,0 +1,36 @@
+/*
+ * Code blocks on an RTL page.
+ *
+ * Problem: <pre>/<code> inherit `dir="rtl"` from <html>, so the block's base
+ * direction is RTL. Lines that mix LTR code with a Hebrew comment — or whole
+ * blocks that are Hebrew prose — get visually reordered (word-order scrambles).
+ *
+ * Fix, in two layers:
+ *  1) The block container is LTR and left-aligned (code/diagrams read normally).
+ *  2) Each line uses `unicode-bidi: plaintext`, so its base direction is decided
+ *     by its own first strong character (UBA rules P2/P3):
+ *       - `val data = ... // רץ על IO`  → Latin-first → LTR line, Hebrew comment
+ *         rendered as a correct RTL run inside it.
+ *       - `"בקובץ LoginViewModelImpl..."` → Hebrew-first → RTL line (prose reads
+ *         right-to-left, English identifiers stay LTR inside).
+ *       - `:app — האפליקציה` / `UI ──► ViewModel` → Latin-first → LTR.
+ *     No content needs to be forced one way; each line does the right thing.
+ */
+
+.expressive-code pre,
+.sl-markdown-content pre {
+  direction: ltr;
+  text-align: left;
+}
+
+.expressive-code .ec-line,
+.expressive-code pre code,
+.sl-markdown-content pre code {
+  unicode-bidi: plaintext;
+}
+
+/* Inline code keeps the surrounding RTL flow but isolates its own bidi so a
+   Latin token with punctuation doesn't disturb the Hebrew sentence around it. */
+.sl-markdown-content :not(pre) > code {
+  unicode-bidi: isolate;
+}

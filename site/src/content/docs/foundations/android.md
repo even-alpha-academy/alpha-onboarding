@@ -1,0 +1,61 @@
+---
+title: "יסודות Android"
+---
+
+המטרה כאן צרה במכוון: מינימום ההיכרות עם הפלטפורמה שמפתח אלפא באמת נוגע בו ביום-יום — לא יותר. אלפא היא אפליקציית Compose עם Activity יחיד, ולכן נדלג על שכבות היסטוריות שלא תכתבו. בסוף תדעו לקרוא את מבנה הפרויקט, להבין מאיפה מגיעים ערכי הקונפיגורציה, ולמה בכלל קיים ViewModel.
+
+## מה אפליקציה מודרנית באמת
+
+אפליקציית אנדרואיד מודרנית כמו אלפא היא **Activity יחיד** שמארח עץ Compose. ה-`MainActivity` מקימה את ה-`NavHost`, וכל המסכים הם composables בתוכו. אין ריבוי Activities ואין Fragments.
+
+> שלוש שורות היסטוריה: פעם בנו מסכים מ-Activities ו-Fragments נפרדים. תיתקלו בהם בתשובות StackOverflow ישנות. אנחנו לא כותבים אותם — המודל שלנו הוא Activity אחד + Compose.
+
+## Lifecycle
+
+ל-Activity יש מחזור חיים. המצבים שחשובים לכם: **created → started → resumed** (ובחזרה למטה כשהאפליקציה יורדת לרקע). נקודה קריטית: **סיבוב מסך = יצירה מחדש** של ה-Activity.
+
+> **גשר:** זה כמו mount/unmount ב-React — אבל עם תוספת שלא הכרתם: מערכת ההפעלה יכולה גם להרוג ולשחזר אתכם, ואז ה-state המקומי הולך לאיבוד. **זו בדיוק הסיבה שקיים ViewModel** — הוא שורד את היצירה-מחדש ומחזיק את ה-state. (על כך במסמך ה-MVVM.)
+
+> **process death (קופסה אחת):** אם מערכת ההפעלה צריכה זיכרון, היא עלולה להרוג את התהליך שלכם ברקע ולשחזר אותו אחר כך. ViewModel **לא** שורד את זה — לשם כך יש persistence (DataStore). נחזור לזה בפרויקט הגמר.
+
+## Manifest
+
+`AndroidManifest.xml` הוא ההצהרה על האפליקציה. מה חי שם: **הרשאות** (permissions), ה-**Activity** היחידה, ו-**services** (פעולות רקע). ב-alpha-mobile תמצאו שם, למשל, services כמו `DevicePollingService` ו-`VpnStatusService` — אין צורך להבין אותם עכשיו, רק לדעת שזה הקובץ שמצהיר עליהם, כדי שלא יהיה מאיים כשתפתחו אותו.
+
+## אוריינות Gradle
+
+לא שליטה — אוריינות. מה צריך לזהות:
+
+- **`settings.gradle.kts`** — רשimat המודולים. ב-alpha-mobile: `:app`, `:core`, `:core:logger`, `:core:ui`, `:map`, `:map:terraexplorer`.
+- **`build.gradle.kts` של מודול** — שלושה חלקים עיקריים: בלוק ה-`plugins`, בלוק ה-`android { }` (קונפיגורציה), ובלוק ה-`dependencies`.
+- **Product flavors** — לאלפא יש מימד `environment` עם שלושה flavors: `dev` / `staging` / `production`, כל אחד × `debug`/`release`. כל שילוב מייצר אפליקציה עם קונפיגורציה משלו.
+- **`BuildConfig` fields** — ערכים שנקבעים בזמן קומפילציה ונגישים בקוד כ-`BuildConfig.X`. למשל `BuildConfig.IS_EXTERNAL`.
+
+> **גשר:** flavors ו-`BuildConfig` ≈ קובצי `.env` שנפתרים בזמן קומפילציה. המקרה האמיתי אצלנו: מפתחי `alpha.*` ב-`gradle.properties` (שראיתם ביום 0) מוזרקים לתוך `BuildConfig` ושולטים אם הבילד מתחבר ל-mocks או לאמיתי.
+
+## הרשאות בזמן ריצה
+
+הרשאה "מסוכנת" (מיקום, מצלמה) דורשת שני דברים: **הצהרה ב-Manifest**, ו**בקשה בזמן ריצה** מהמשתמש. המקרה הרלוונטי לאלפא הוא **מיקום** — האפליקציה מצהירה עליו ב-Manifest, ובזמן ריצה מבקשת אישור מהמשתמש לפני שהיא ניגשת אליו. בלי שניהם, הגישה תיכשל.
+
+## קריאת חובה
+
+ברמת skim, מ-developer.android.com:
+
+- [The activity lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle)
+- [App manifest overview](https://developer.android.com/guide/topics/manifest/manifest-intro)
+- [Configure your build](https://developer.android.com/build)
+
+## תרגיל
+
+בתוך ה-clone של alpha-mobile, בעזרת ניווט ה-IDE בלבד (Ctrl/Cmd+click, "Find Usages"):
+
+1. **מצאו איזה מודול מצהיר על התלות ב-AAR של TerraExplorer**, וצטטו את השורה.
+2. **עקבו אחרי `BuildConfig.IS_EXTERNAL`** — איפה הוא מוגדר (ב-Gradle) ואיפה הוא בשימוש (בקוד).
+3. **רשמו את ההרשאות שהאפליקציה מצהירה עליהן** מתוך ה-Merged Manifest view ב-Android Studio.
+
+**הגדרת סיום:** שלוש התשובות, כל אחת עם נתיב קובץ.
+
+## למעבר הלאה
+
+המשיכו אל [Compose למפתחי React](/alpha-onboarding/foundations/compose/) — הגשר החזק ביותר שלכם, כי Compose הוא המודל המנטלי של React ב-Kotlin.
+

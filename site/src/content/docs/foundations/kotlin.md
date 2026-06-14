@@ -1,0 +1,174 @@
+---
+title: "Kotlin למפתחי TypeScript"
+---
+
+המסמך הזה הוא גשר של יום אחד מ-TypeScript ל-Kotlin — לא קורס Kotlin, אלא שכבת תרגום ועליה החלקים שבאמת חדשים. אחרי שתסיימו, תוכלו לקרוא קוד Kotlin בריפו של הצוות ולכתוב מודול קטן בעצמכם. לכל נושא יש זוג קטעים TS↔Kotlin היכן שיש מקבילה, וקופסת **"אין מקבילה — שימו לב"** היכן שאין.
+
+## מיפוי מהיר
+
+| TypeScript | Kotlin | הערה |
+|---|---|---|
+| `const x = 1` | `val x = 1` | `val` = לקריאה בלבד |
+| `let x = 1` | `var x = 1` | `var` = ניתן לשינוי; העדיפו `val` |
+| `interface` / `type` | `interface` | ל-union types ראו `sealed` בהמשך |
+| `(a) => a + 1` | `{ a -> a + 1 }` | lambda; הפרמטר היחיד הוא `it` |
+| `a?.b` | `a?.b` | זהה — safe call |
+| `a ?? b` | `a ?: b` | Elvis operator |
+| `` `hi ${name}` `` | `"hi $name"` | string template; ביטוי: `${expr}` |
+| `const {a, b} = obj` | `val (a, b) = obj` | destructuring (על `data class`) |
+| `async/await` | `suspend` | שונה מהותית — [המסמך הבא](/alpha-onboarding/foundations/coroutines/) |
+
+> **אין מקבילה — שימו לב:** ב-Kotlin אין `undefined`. יש רק `null`, והוא חלק ממערכת הטיפוסים (ראו למטה). אין גם `typeof`/`instanceof` בסגנון JS — יש `is` (ו-smart cast שמצמצם את הצורך ב-cast ידני).
+
+## null safety
+
+ב-TypeScript, `strictNullChecks` הוא דגל. ב-Kotlin, ה-nullability היא חלק מהטיפוס עצמו:
+
+```kotlin
+val name: String   = "Dana"   // לעולם לא null
+val maybe: String? = null      // עשוי להיות null — הקומפיילר יכריח אתכם לטפל
+```
+
+על טיפוס nullable, הקומפיילר לא ייתן לכם לגשת לשדה בלי טיפול. הדפוסים:
+
+```kotlin
+maybe?.length          // safe call → Int? (null אם maybe הוא null)
+maybe?.let { use(it) } // הרץ את הבלוק רק אם לא-null
+maybe ?: "default"     // ערך ברירת מחדל
+maybe!!.length         // "אני בטוח שזה לא null" — זורק NPE אם טעיתם
+```
+
+> **כלל הצוות:** מתייחסים ל-`!!` כמו ל-`any` ב-TypeScript — דורש הצדקה. כמעט תמיד יש דרך נקייה יותר (`?.let`, `?:`, או early return). אם כתבתם `!!`, עצרו ושאלו אם באמת אין ברירה.
+
+## מחלקות ו-data
+
+```kotlin
+data class TrainingArea(
+    val id: String,
+    val name: String,
+    val capacity: Int,
+)
+```
+
+`data class` נותן לכם בחינם `equals`/`hashCode`/`toString`/`copy`/destructuring — בערך מה ש-TS נותן ב-interface + object literal, אבל עם שוויון מבני אמיתי. עדכון נעשה דרך `copy` (immutability נתמכת בשפה):
+
+```kotlin
+val updated = area.copy(capacity = 30)  // אובייקט חדש, השאר ללא שינוי
+```
+
+זה בדיוק האינסטינקט מ-React — אל תשנו state במקום, צרו עותק חדש — רק שכאן השפה תומכת בו ישירות.
+
+**sealed class / interface** — זו המקבילה ל-discriminated unions, והדבר שמפתחי TS קולטים מיד:
+
+```kotlin
+sealed interface SearchMode {
+    data object Initial : SearchMode
+    data object Loading : SearchMode
+    data class Loaded(val results: List<String>) : SearchMode
+}
+```
+
+כמו union עם tag field, אבל ה-`when` עליו ממצה (exhaustive) — הקומפיילר יודע את כל הענפים ויתלונן אם שכחתם אחד:
+
+```kotlin
+val text = when (mode) {        // אין צורך ב-else אם כיסיתם הכל
+    SearchMode.Initial -> "—"
+    SearchMode.Loading -> "טוען..."
+    is SearchMode.Loaded -> "${mode.results.size} תוצאות"
+}
+```
+
+**`object` / `companion object`** — `object` הוא singleton מובנה בשפה; `companion object` מחזיק חברים "סטטיים" של מחלקה (קבועים, factory functions).
+
+## פונקציות
+
+**Extension functions** — אין מקבילה ב-TS. אפשר "להוסיף" מתודה לטיפוס קיים בלי לרשת אותו:
+
+```kotlin
+fun String.isValidId(): Boolean = length == 24 && all { it.isLetterOrDigit() }
+"abc123".isValidId()   // נקרא כאילו זו מתודה של String
+```
+
+זו הסיבה שהקוד מלא בהן — הן הופכות עזרים לקריאים ולשרשור-ידידותיים. תראו אותן הרבה בקוד של הצוות (למשל `String.generateRandomUUID()` ב-SearchViewModel).
+
+**ארגומנטים עם ברירת מחדל ושמיים** — מחליפים את ה-overloads ואת הפרמטרים האופציונליים של TS:
+
+```kotlin
+fun fetch(limit: Int = 50, sort: Boolean = true) { /* ... */ }
+fetch(sort = false)   // named argument; limit נשאר 50
+```
+
+**scope functions** (`let`/`apply`/`run`/`also`/`with`) — נוחות אבל קלות לניצול-יתר. הכלל הפרגמטי של הצוות: העדיפו `let` לשרשראות-null, ו-`apply` ל-builders. **אל תקננו אותן זו בתוך זו** — קוד מקונן של scope functions הופך מהר לבלתי-קריא.
+
+## שוויון — אזהרה
+
+> **⚠️ הסמנטיקה הפוכה מ-JavaScript:**
+> | | Kotlin | JavaScript |
+> |---|---|---|
+> | `==` | שוויון **מבני** (כמו `.equals`) | שוויון עם type coercion |
+> | `===` | שוויון **רפרנס** (אותו אובייקט) | שוויון מחמיר (ללא coercion) |
+>
+> ב-Kotlin `==` הוא מה שאתם רוצים ברוב המקרים (משווה תוכן). זה ההפך מההרגל מ-JS, שם `===` הוא "הבטוח". שימו לב במיוחד בימים הראשונים.
+
+## delegation
+
+המילה `by` מאצילה מימוש — לפרופרטיז או למימוש interface:
+
+```kotlin
+val lazyValue: String by lazy { computeExpensive() }  // מחושב פעם אחת, בקריאה הראשונה
+class MyList(impl: List<Int>) : List<Int> by impl     // מאציל את כל ה-interface ל-impl
+```
+
+תיתקלו בזה בקוד; מספיק לזהות ולהבין.
+
+## קריאת חובה
+
+מ-[kotlinlang.org](https://kotlinlang.org/docs/home.html), עברו על:
+
+- [Basic syntax](https://kotlinlang.org/docs/basic-syntax.html) ו-[Control flow](https://kotlinlang.org/docs/control-flow.html)
+- [Classes and objects](https://kotlinlang.org/docs/classes.html) — interfaces, data classes, sealed classes, delegation
+- [Functions](https://kotlinlang.org/docs/functions.html) ו-[Scope functions](https://kotlinlang.org/docs/scope-functions.html)
+- [Null safety](https://kotlinlang.org/docs/null-safety.html) ו-[Equality](https://kotlinlang.org/docs/equality.html)
+
+(Coroutines מקבלים מסמך משלהם — הבא בתור.)
+
+## תרגיל
+
+תרגמו את מודול ה-TypeScript הבא ל-Kotlin אידיומטי (קובץ scratch מספיק):
+
+```typescript
+type Shape =
+  | { kind: "circle"; radius: number }
+  | { kind: "rect"; width: number; height: number };
+
+class AreaCalculator {
+  private cache: Map<string, number> = new Map();
+
+  area(shape: Shape, label?: string): number {
+    const result =
+      shape.kind === "circle"
+        ? Math.PI * shape.radius ** 2
+        : shape.width * shape.height;
+    if (label) this.cache.set(label, result);
+    return result;
+  }
+}
+
+function describe(shape: Shape): string {
+  return shape.kind === "circle"
+    ? `circle r=${shape.radius}`
+    : `rect ${shape.width}x${shape.height}`;
+}
+```
+
+אחר כך סקרו עם כלי ה-AI במצב Explainer ("מה לא אידיומטי כאן?"), ולבסוף עם המנטור.
+
+**הגדרת סיום ("איך תדע שסיימת"):**
+- מתקמפל בקובץ Kotlin.
+- אין `!!`, ואין "Java-isms" (למשל `if/else` במקום `when`, או class רגיל במקום `sealed`/`data`).
+- השתמשתם ב-`sealed` במקום שבו היה union, וב-`when` ממצה.
+
+## למעבר הלאה
+
+המשיכו אל [Coroutines ו-Flow](/alpha-onboarding/foundations/coroutines/) — הפער המנטלי הגדול ביותר מעולם ה-JS, והבסיס שעליו יושב כל ה-state באלפא.
+
