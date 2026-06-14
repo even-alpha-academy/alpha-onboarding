@@ -50,6 +50,35 @@ title: "מדריך למנטור"
 
 בנייה עצמאית של אותו מפרט; הם סוקרים זה את ה-MR של זה **לפניך** (הסוקר מתחלף); ללא שיתוף קוד; סיפורי-מלחמה של דיבוג מעודדים. העומס שלך יורד בכ-30% בעומק הסקירה — הסקירות ההדדיות תופסות את השטחי.
 
+## הקצאת repo לחניך (provisioning)
+
+> **למה לא GitHub Classroom?** GitHub סוגרת את Classroom (אין הרשמות חדשות מ-מאי 2026, כיבוי מלא
+> אוגוסט 2026). במקום זה אנחנו עובדים **בתוך הארגון** עם template repos ופקודת `gh` אחת לחניך —
+> בלי שירות חיצוני, בלי שקוד של חניך עוזב את הארגון. (אם בעתיד תרצו UI: `foundation50/classroom50`
+> הוא חלופת קוד-פתוח GitHub-native, אבל היא עדיין pre-GA.)
+
+**הכנה חד-פעמית (כבר בוצעה בהקמת הארגון):** base-permission=None (חניך לא רואה repo פרטי שלא צורף
+אליו → בידוד מלא), team בשם `mentors`, ותרגילי ה-template מסומנים כ-template repositories.
+
+**לכל חניך — פקודה אחת** (דורש `gh` מאומת כ-owner של הארגון):
+
+```bash
+# יוצר repo פרטי per-intern מכל template, מצרף את החניך (push לשלו בלבד) ואת צוות mentors
+./provision-intern.sh <github-username> exercise-gate1 exercise-final-backend final-project-app
+```
+
+מה זה עושה לכל template: יוצר `even-alpha-academy/<template>-<username>` (פרטי) מה-template, נותן לחניך
+push ל-repo **שלו בלבד**, ולצוות `mentors` גישת סקירה. הבידוד מגיע מ-base-permission=None.
+
+**גשר ל-alpha-mobile (read-bridge, פעם אחת לחניך):** החניך צריך לקרוא את alpha-mobile (הגרסה
+הפתוחה/stub) כעזר. תנו לו read על ה-repo הבודד הזה:
+
+```bash
+gh api -X PUT repos/even-alpha/alpha-mobile/collaborators/<username> -f permission=pull
+```
+
+כך החניך הוא חבר **רק** בארגון `even-alpha-academy` ולא רואה קוד אמיתי — מלבד ה-repo האחד שאישרתם.
+
 ## מפת המסמכים בתיקייה הזו
 
 - [נקודות בקרה](/alpha-onboarding/mentor/checkpoints/) — תסריטי שיחה לשערים ולנקודות הבקרה.
