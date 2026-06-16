@@ -10,8 +10,8 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'חפיפת צוות אלפא',
-      // Force code blocks LTR on the RTL page (Hebrew comments stay RTL within the line).
-      customCss: ['./src/styles/rtl-code.css'],
+      // Brand accent (sky-blue, from alpha-mobile) + code blocks LTR on the RTL page.
+      customCss: ['./src/styles/brand.css', './src/styles/rtl-code.css'],
       // Single-language site rooted in Hebrew → built-in Hebrew UI strings + full RTL.
       defaultLocale: 'root',
       locales: {

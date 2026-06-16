@@ -1,0 +1,20 @@
+/*
+ * Alpha brand accent — sky-blue, taken from alpha-mobile's theme
+ * (Color.kt: primary = BrightSkyBlue #56B8FF on OffBlack #222327).
+ * Only the accent ramp is retuned; Starlight's neutral grays are left alone
+ * (they already match the team's dark surface closely enough).
+ */
+
+/* Dark theme (the site default) */
+:root {
+  --sl-color-accent-low: #0e3a57;
+  --sl-color-accent: #2491d8;
+  --sl-color-accent-high: #7fc6ff;
+}
+
+/* Light theme */
+:root[data-theme='light'] {
+  --sl-color-accent-low: #c7e6ff;
+  --sl-color-accent: #1a6dab;
+  --sl-color-accent-high: #06324f;
+}
