@@ -25,7 +25,7 @@ flowchart TB
     VM["ViewModel · StateFlow"]
     Repo["Repository"]
     SRC["API / Storage"]
-    UI -- "events (lambdas)" --> VM
+    UI -- "events" --> VM
     VM -- "calls" --> Repo
     Repo -- "Flow / suspend" --> SRC
     VM -. "state" .-> UI

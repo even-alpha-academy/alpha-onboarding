@@ -24,6 +24,8 @@ export default defineConfig({
           lineColor: '#56B8FF',             // edges
           secondaryColor: '#1c2433',
           tertiaryColor: '#101620',
+          background: '#0b1018',            // diagram canvas
+          edgeLabelBackground: '#0b1018',  // opaque chip behind edge labels → arrow line can't bleed through the text
           fontFamily: 'inherit',
           clusterBkg: '#0e1726',            // subgraph background
           clusterBorder: '#2c4a6b',

@@ -25,3 +25,16 @@
   text-align: center;
   unicode-bidi: plaintext;
 }
+/*
+ * Edge labels (the words sitting ON an arrow, e.g. "events"/"calls") must have a SOLID
+ * background or the arrow line bleeds through the glyphs. themeVariables.edgeLabelBackground
+ * handles the rect; this forces an opaque fill + a little padding as a belt-and-suspenders.
+ */
+.mermaid .edgeLabel,
+.mermaid .edgeLabel p,
+.mermaid .edgeLabel rect,
+.mermaid .edgeLabel .labelBkg {
+  background-color: #0b1018 !important;
+  fill: #0b1018 !important;
+  opacity: 1 !important;
+}
