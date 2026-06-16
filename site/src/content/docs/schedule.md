@@ -16,10 +16,10 @@ title: "לוח זמנים"
 | 7 | יסודות Android (חצי שני של יום 7) | [יסודות/03](/alpha-onboarding/foundations/android/) |
 | 8–9 | Compose למפתחי React | [יסודות/04](/alpha-onboarding/foundations/compose/) |
 | 9–10 | MVVM + Koin | [יסודות/05](/alpha-onboarding/foundations/mvvm-koin/) |
-| 10 | תרגיל יציאה → **מבחן מדרגה 1** | [יסודות/06](/alpha-onboarding/foundations/gate1/) |
-| 11–13 | פרויקט הגמר שלב 1: התחברות (MR + סקירה) → **נקודת אמצע ביום 13** | [פרויקט הגמר/02](/alpha-onboarding/final-project/login/) |
+| 10 | תרגיל יציאה ← **מבחן מדרגה 1** | [יסודות/06](/alpha-onboarding/foundations/gate1/) |
+| 11–13 | פרויקט הגמר שלב 1: התחברות (MR + סקירה) ← **נקודת אמצע ביום 13** | [פרויקט הגמר/02](/alpha-onboarding/final-project/login/) |
 | 14–18 | פרויקט הגמר שלב 2: מפה עם Skyline (MR + סקירה) | [פרויקט הגמר/03](/alpha-onboarding/final-project/map-skyline/) |
-| 19–22 | פרויקט הגמר שלב 3: תיעוד והיסטוריה (MR + סקירה) → **מבחן מדרגה 2** | [פרויקט הגמר/04](/alpha-onboarding/final-project/logging-history/) |
+| 19–22 | פרויקט הגמר שלב 3: תיעוד והיסטוריה (MR + סקירה) ← **מבחן מדרגה 2** | [פרויקט הגמר/04](/alpha-onboarding/final-project/logging-history/) |
 | 23 | דומיין ו-GIS של אלפא | [אלפא/01](/alpha-onboarding/alpha/domain-gis/) |
 | 24 | סיור ארכיטקטורה + סודות/שתי-רשתות | [אלפא/02](/alpha-onboarding/alpha/architecture/), [אלפא/03](/alpha-onboarding/alpha/secrets-networks/) |
 | 25–26 | טיקט אמיתי ראשון; דמו + רטרו ביום 26 | [אלפא/04](/alpha-onboarding/alpha/first-ticket/) |
@@ -30,8 +30,8 @@ title: "לוח זמנים"
 |---|---|
 | 1 | התמצאות + הקמה |
 | 2–4 | עקרונות AI + backend |
-| 5–8 | יסודות בדחיסה (Kotlin 5, Coroutines 6, Compose 7, MVVM+Koin+תרגיל יציאה 8) → מבחן מדרגה 1 |
-| 9–17 | פרויקט הגמר (התחברות 9–11, מפה 12–15, תיעוד 16–17) → מבחן מדרגה 2; נקודת אמצע ביום 11 |
+| 5–8 | יסודות בדחיסה (Kotlin 5, Coroutines 6, Compose 7, MVVM+Koin+תרגיל יציאה 8) ← מבחן מדרגה 1 |
+| 9–17 | פרויקט הגמר (התחברות 9–11, מפה 12–15, תיעוד 16–17) ← מבחן מדרגה 2; נקודת אמצע ביום 11 |
 | 18–20 | חפיפת אלפא + טיקט ראשון; דמו+רטרו ביום 20 |
 
 ## הרחבות (אופציונלי, אחרי מבחן מדרגה 2 או אחרי יום 26)

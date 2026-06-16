@@ -51,7 +51,7 @@ flowchart RL
 
 ## הבילד החיצוני, עכשיו באמת
 
-נסגור את הלולאה מיום 0: `alpha.connectivity` ריק → מתקמפל `src/external` (mocks), `BuildConfig.IS_EXTERNAL = true`, שרתים מדומים / target מבודד. **זו הסיבה** שהאפליקציה רצה ביום הראשון שלכם בלי VPN ובלי keystores. לא היה שם קסם — היה שם תכנון.
+נסגור את הלולאה מיום 0: `alpha.connectivity` ריק ← מתקמפל `src/external` (mocks), `BuildConfig.IS_EXTERNAL = true`, שרתים מדומים / target מבודד. **זו הסיבה** שהאפליקציה רצה ביום הראשון שלכם בלי VPN ובלי keystores. לא היה שם קסם — היה שם תכנון.
 
 ## סנכרון (מודעות בלבד)
 

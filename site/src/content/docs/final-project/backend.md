@@ -14,8 +14,8 @@ Nest + MongoDB (התקנה native מקומית). כל ה-routes:
 
 | Method | Route | תיאור |
 |---|---|---|
-| `POST` | `/auth/register` | רישום → `{ token }` |
-| `POST` | `/auth/login` | התחברות → `{ token }` (JWT) |
+| `POST` | `/auth/register` | רישום ← `{ token }` |
+| `POST` | `/auth/login` | התחברות ← `{ token }` (JWT) |
 | `GET` | `/training-areas` | כל השטחים, כולל קואורדינטות |
 | `GET` | `/training-areas/:id` | שטח בודד |
 | `POST` | `/exercises` | יצירה (body מאומת) |

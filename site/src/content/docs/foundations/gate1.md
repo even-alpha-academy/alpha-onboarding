@@ -12,7 +12,7 @@ title: "תרגיל סיכום — מבחן מדרגה 1"
   - **loading** — בזמן ההמתנה.
   - **error** — ה-repo המזויף נכשל לפי דרישה (דגל שתדליקו כדי לבדוק את הענף).
   - **empty** — רשימה ריקה.
-- **הקשה על פריט → מסך פירוט** דרך ניווט typed (`sealed Route` + extension על `NavGraphBuilder`).
+- **הקשה על פריט ← מסך פירוט** דרך ניווט typed (`sealed Route` + extension על `NavGraphBuilder`).
 - **הארכיטקטורה חייבת לעקוב אחרי תבנית הצוות במדויק:**
   - ViewModel: `interface`+`Impl`, `StateFlow<ScreenState>`, `data class` אחד immutable, `_state` פרטי.
   - Repository: `interface`+`Impl`.
