@@ -35,12 +35,14 @@ title: "שלב 2 — מפה עם Skyline"
 
 זו רצף-האתחול כפי שמתואר ב-`map/terraexplorer/src/main/java/com/even/map/terraexplorer/functions/InitMapView.kt` — **התאימו, אל תעתיקו-הדביקו**; הקובץ פתוח מולכם:
 
-```text
-TEApp.setMainActivityContext(activity)
-TEApp.setApplicationContext(activity.applicationContext)
-CoreServices.Init(activity)
-  → רושמים BroadcastReceiver ל-TEGLRenderer.ENGINE_INITIALIZED
-  → כשמתקבל: פותחים את הפרויקט (.fly), ואז מוסיפים שכבות
+```mermaid
+flowchart TB
+    A["TEApp.setMainActivityContext(activity)"]
+    B["TEApp.setApplicationContext(appContext)"]
+    C["CoreServices.Init(activity)"]
+    D["register BroadcastReceiver · TEGLRenderer.ENGINE_INITIALIZED"]
+    E["on fired → open project (.fly) → add layers"]
+    A --> B --> C --> D --> E
 ```
 
 ה-view הוא **`TEView`**, ומארחים אותו ב-Compose דרך `AndroidView { }`.

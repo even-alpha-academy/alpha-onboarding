@@ -1,0 +1,27 @@
+/*
+ * Mermaid diagrams on the RTL page.
+ * The diagram is a graphic — it must render left-to-right internally, or the node labels
+ * (rendered in <foreignObject> HTML) inherit dir="rtl" from the page and clip/shift.
+ * Force LTR inside the diagram and center the whole block.
+ */
+.mermaid {
+  direction: ltr;
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+/* Labels: keep LTR regardless of the page's RTL flow. */
+.mermaid foreignObject div,
+.mermaid .nodeLabel,
+.mermaid .edgeLabel,
+.mermaid .label,
+.mermaid span,
+.mermaid p {
+  direction: ltr !important;
+  text-align: center;
+  unicode-bidi: plaintext;
+}

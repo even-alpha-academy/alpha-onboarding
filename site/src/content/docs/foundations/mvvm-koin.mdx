@@ -19,13 +19,16 @@ import VideoLink from '../../../components/VideoLink.astro';
 
 זרימת נתונים חד-כיוונית (Unidirectional Data Flow):
 
-```text
-        events (lambdas)            calls
-  UI  ───────────────────►  ViewModel  ───────────────────►  Repository ──► API / Storage
- (Compose)                     │                                  │
-   ▲                           │  StateFlow<ScreenState>          │  Flow<T> / suspend
-   └───────────────────────────┘◄─────────────────────────────────┘
-        state flows back down
+```mermaid
+flowchart TB
+    UI["UI · Compose"]
+    VM["ViewModel · StateFlow"]
+    Repo["Repository"]
+    SRC["API / Storage"]
+    UI -- "events (lambdas)" --> VM
+    VM -- "calls" --> Repo
+    Repo -- "Flow / suspend" --> SRC
+    VM -. "state" .-> UI
 ```
 
 > **גשר:** זה Redux בלי ה-boilerplate. ה-ViewModel הוא ה-store+reducers של מסך אחד; `ScreenState` הוא צורת ה-state; ה-events הם ה-actions. ההבדל: אין dispatch מפורש ואין middleware — קוראים למתודה על ה-ViewModel, היא מעדכנת `_state`, וה-UI מתרנדר מחדש.

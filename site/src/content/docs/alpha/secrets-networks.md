@@ -6,12 +6,14 @@ title: "סודות ושתי רשתות"
 
 ## שתי רשתות, מקור אחד
 
-```text
-   GitHub (even-alpha/alpha-mobile)                 הרשת הסגורה
-   הפיתוח קורה כאן: היסטוריה מלאה,    ── מעבר ──►   צרכן downstream: שכבת assets/secrets
-   PRs רגילים, branch = dev                          אמיתיים מעל אותו מקור, ובונה את
-                                                     האפליקציה המבצעית
+```mermaid
+flowchart RL
+    GH["GitHub · open · full history · PRs"]
+    CN["Closed network · real assets + secrets"]
+    GH == "transfer · same source" ==> CN
 ```
+
+הצד הימני (**GitHub**): הפיתוח קורה כאן — היסטוריה מלאה, PRs רגילים, branch = dev. הצד השמאלי (**הרשת הסגורה**): צרכן downstream שמלביש assets/secrets אמיתיים מעל אותו מקור, ובונה את האפליקציה המבצעית.
 
 **אותו מקור** נבנה בשתי הרשתות, נבחר על ידי מאפייני Gradle (`alpha.connectivity` = `internal`/`external`). אין "branch של infra", אין patches. ההבדל היחיד הוא הערכים שמוזרקים בזמן הבנייה.
 

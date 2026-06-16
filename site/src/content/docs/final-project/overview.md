@@ -38,12 +38,18 @@ title: "פרויקט הסיום — «תרגול»"
 
 ## הארכיטקטורה הנדרשת
 
-```text
-Compose UI ──► ViewModel ──► Repository ──► ApiClient (OkHttp + kotlinx.serialization)
- (stateless)   (interface+Impl,   (interface+Impl)        └─► DataStore (token)
-               StateFlow<ScreenState>)
-        ▲                                  Koin מחווט הכל; ניווט דרך sealed Route; טסטים לכל feature
+```mermaid
+flowchart TB
+    UI["Compose UI · stateless"]
+    VM["ViewModel · interface+Impl · StateFlow"]
+    Repo["Repository · interface+Impl"]
+    API["ApiClient · OkHttp + kotlinx.serialization"]
+    DS["DataStore · token"]
+    UI --> VM --> Repo --> API
+    Repo --> DS
 ```
+
+ה-Koin מחווט הכל; הניווט דרך `sealed Route`; טסטים לכל feature.
 
 **הפרויקט נבדק מול [MVVM ו-Koin](/alpha-onboarding/foundations/mvvm-koin/).** כל הפרות התבנית שם נספרות כאן.
 

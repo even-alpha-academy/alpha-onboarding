@@ -21,11 +21,13 @@ title: "סיור בארכיטקטורה של אלפא"
 
 השכבות שבניתן מהן צעצוע:
 
-```text
-MapController (interface, :map)
-   └─► TerraExplorerController (impl, :map:terraexplorer)
-          └─► wrappers/ + functions/   (הקוד שמסתיר את com.skyline.*)
-                 └─► TerraExplorerAndroidModule.aar
+```mermaid
+flowchart TB
+    MC["MapController · interface · :map"]
+    TEC["TerraExplorerController · impl · :map:terraexplorer"]
+    WR["wrappers/ + functions/ · hides com.skyline.*"]
+    AAR["TerraExplorerAndroidModule.aar"]
+    MC --> TEC --> WR --> AAR
 ```
 
 השוו ל-wrapper שלכם מפרויקט הגמר: **אותו רעיון, יותר פעולות.** `MapController.kt` חושף עשרות מתודות (listeners, layers, camera) במקום ארבע — אבל העיקרון זהה: שום דבר מעל ה-wrapper לא מכיר את ה-SDK. התבנית ההיברידית גם היא מוכרת: `TEView` בתוך `AndroidView`, ומעליו overlay של Compose.
