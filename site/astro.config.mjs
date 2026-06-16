@@ -26,7 +26,10 @@ export default defineConfig({
           tertiaryColor: '#101620',
           background: '#0b1018',            // diagram canvas
           edgeLabelBackground: '#0b1018',  // opaque chip behind edge labels → arrow line can't bleed through the text
-          fontFamily: 'inherit',
+          // Explicit font (NOT 'inherit'): Mermaid measures label width with this font and renders with it too.
+          // 'inherit' made it measure with one font and render with another → the auto-sized label background
+          // came out narrower than the text, so the arrow line showed through the glyph edges.
+          fontFamily: 'system-ui, -apple-system, Segoe UI, sans-serif',
           clusterBkg: '#0e1726',            // subgraph background
           clusterBorder: '#2c4a6b',
         },

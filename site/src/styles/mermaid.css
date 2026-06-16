@@ -38,3 +38,17 @@
   fill: #0b1018 !important;
   opacity: 1 !important;
 }
+/*
+ * Belt-and-suspenders: paint a halo around each glyph in the canvas colour, UNDER the fill.
+ * If the auto-sized background rect is ever a hair too small for the rendered text, this halo
+ * still hides the arrow line right up against every letter — so the line can never show through.
+ */
+.mermaid .edgeLabel text,
+.mermaid .edgeLabel tspan,
+.mermaid .edgeLabel .text-inner-tspan {
+  paint-order: stroke fill;
+  stroke: #0b1018;
+  stroke-width: 5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
