@@ -9,8 +9,11 @@ interface Props {
   channel?: string;
   duration?: string;
   why?: string;
+  // Optional: when only part of the video is relevant. e.g. "3:00–12:00 — concurrency ו-cancellation".
+  // Put a matching `&t=180s` in `url` to deep-link straight to it.
+  segment?: string;
 }
-const { url, title, channel, duration, why } = Astro.props;
+const { url, title, channel, duration, why, segment } = Astro.props;
 const meta = [channel, duration].filter(Boolean).join(' · ');
 ---
 
@@ -23,6 +26,7 @@ const meta = [channel, duration].filter(Boolean).join(' · ');
     </span>
     <span class="vl-title" dir="ltr">{title}</span>
     {why && <span class="vl-why">{why}</span>}
+    {segment && <span class="vl-segment">📍 הקטע הרלוונטי: {segment}</span>}
   </span>
 </a>
 
@@ -69,4 +73,5 @@ const meta = [channel, duration].filter(Boolean).join(' · ');
   .vl-meta { font-size: 0.8rem; color: var(--sl-color-gray-3); unicode-bidi: plaintext; }
   .vl-title { font-weight: 600; unicode-bidi: plaintext; }
   .vl-why { font-size: 0.92rem; color: var(--sl-color-gray-2); }
+  .vl-segment { font-size: 0.85rem; color: var(--sl-color-accent-high); }
 </style>
