@@ -10,6 +10,9 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'חפיפת צוות אלפא',
+      // Brand logo (alpha-mobile app icon) + favicon.
+      logo: { src: './src/assets/alpha-logo.png', alt: 'אלפא' },
+      favicon: '/alpha-logo.png',
       // Brand accent (sky-blue, from alpha-mobile) + code blocks LTR on the RTL page.
       customCss: ['./src/styles/brand.css', './src/styles/rtl-code.css'],
       // Single-language site rooted in Hebrew → built-in Hebrew UI strings + full RTL.
