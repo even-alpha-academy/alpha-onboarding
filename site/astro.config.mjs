@@ -38,7 +38,7 @@ export default defineConfig({
             { label: 'יסודות Android', link: '/foundations/android/' },
             { label: 'Compose למפתחי React', link: '/foundations/compose/' },
             { label: 'MVVM ו-Koin', link: '/foundations/mvvm-koin/' },
-            { label: 'תרגיל סיכום — שער 1', link: '/foundations/gate1/' },
+            { label: 'תרגיל סיכום — מבחן מדרגה 1', link: '/foundations/gate1/' },
           ],
         },
         {

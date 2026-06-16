@@ -1,0 +1,72 @@
+---
+// A compact RTL-aware "recommended video" card.
+// Usage (.mdx):
+//   <VideoLink url="https://youtu.be/ID" title="..." channel="..." duration="18 דק׳"
+//              why="למה זה מתאים — משפט אחד בעברית" />
+interface Props {
+  url: string;
+  title: string;
+  channel?: string;
+  duration?: string;
+  why?: string;
+}
+const { url, title, channel, duration, why } = Astro.props;
+const meta = [channel, duration].filter(Boolean).join(' · ');
+---
+
+<a class="video-link" href={url} target="_blank" rel="noopener noreferrer">
+  <span class="play" aria-hidden="true">▶</span>
+  <span class="vl-body">
+    <span class="vl-head">
+      <span class="vl-badge">וידאו מומלץ</span>
+      {meta && <span class="vl-meta" dir="ltr">{meta}</span>}
+    </span>
+    <span class="vl-title" dir="ltr">{title}</span>
+    {why && <span class="vl-why">{why}</span>}
+  </span>
+</a>
+
+<style>
+  .video-link {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    margin: 1.25rem 0;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-inline-start: 4px solid var(--sl-color-accent);
+    border-radius: 0.5rem;
+    background: var(--sl-color-gray-6);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .video-link:hover {
+    border-inline-start-color: var(--sl-color-accent-high);
+    background: var(--sl-color-gray-5);
+  }
+  .play {
+    flex-shrink: 0;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 0.9rem;
+    background: var(--sl-color-accent);
+    color: var(--sl-color-white);
+  }
+  .vl-body { display: grid; gap: 0.2rem; min-width: 0; }
+  .vl-head { display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap; }
+  .vl-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.05rem 0.4rem;
+    border-radius: 0.3rem;
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-accent-high);
+  }
+  .vl-meta { font-size: 0.8rem; color: var(--sl-color-gray-3); unicode-bidi: plaintext; }
+  .vl-title { font-weight: 600; unicode-bidi: plaintext; }
+  .vl-why { font-size: 0.92rem; color: var(--sl-color-gray-2); }
+</style>

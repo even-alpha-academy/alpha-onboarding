@@ -28,7 +28,7 @@ title: "שלב 1 — התחברות"
 ## מדיניות AI
 
 - **Navigator** — כן.
-- **Generator** — רק אם המנטור פתח אותו בשער 1, ואז רק ל-boilerplate (DTOs של serialization) — **אף פעם** ל-ViewModel.
+- **Generator** — רק אם החופף פתח אותו במבחן מדרגה 1, ואז רק ל-boilerplate (DTOs של serialization) — **אף פעם** ל-ViewModel.
 
 ## כתובת ה-backend ומכשיר היעד
 
@@ -43,7 +43,7 @@ title: "שלב 1 — התחברות"
 
 ## הגשה
 
-MR #1. המנטור סוקר לפי מחוון שלב-1.
+MR #1. החופף סוקר לפי מחוון שלב-1.
 
 ## הגדרת סיום
 

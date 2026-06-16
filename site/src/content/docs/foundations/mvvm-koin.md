@@ -151,13 +151,13 @@ fun `Change text input fetch search results after debounce`() = runTest {
 
 - [ViewModel overview](https://developer.android.com/topic/libraries/architecture/viewmodel) ב-developer.android.com.
 - [Koin definitions](https://insert-koin.io/docs/reference/koin-core/definitions/) — `single` / `factory` / `viewModelOf`.
-- וקראו **שוב** את פרק "Architecture Patterns" ב-`CLAUDE.md` של alpha-mobile — עכשיו, כשכל מילה בו אומרת משהו.
+- וקראו **שוב** את החלק "Architecture Patterns" ב-`CLAUDE.md` של alpha-mobile — עכשיו, כשכל מילה בו אומרת משהו.
 
 ## תרגיל
 
-אין תרגיל כאן — [המסמך הבא](/alpha-onboarding/foundations/gate1/) הוא התרגיל: שער 1.
+אין תרגיל כאן — [המסמך הבא](/alpha-onboarding/foundations/gate1/) הוא התרגיל: מבחן מדרגה 1.
 
 ## למעבר הלאה
 
-המשיכו אל [תרגיל הסיכום — שער 1](/alpha-onboarding/foundations/gate1/). הוא מודד שכל מה שבנינו עד כה נחת.
+המשיכו אל [תרגיל הסיכום — מבחן מדרגה 1](/alpha-onboarding/foundations/gate1/). הוא מודד שכל מה שבנינו עד כה נחת.
 

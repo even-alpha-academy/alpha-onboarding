@@ -60,7 +60,7 @@ Nest + MongoDB (התקנה native מקומית). כל ה-routes:
 
 ## תוצרים
 
-backend רץ על localhost + seed + smoke tests + קובץ הקונטקסט. המנטור עושה סקירה של 15 דקות על **איך כיוונתם את ה-agent** (הראו את ה-prompts!), לא רק על הקוד.
+backend רץ על localhost + seed + smoke tests + קובץ הקונטקסט. החופף עושה סקירה של 15 דקות על **איך כיוונתם את ה-agent** (הראו את ה-prompts!), לא רק על הקוד.
 
 ## תקלות צפויות
 
@@ -74,7 +74,7 @@ backend רץ על localhost + seed + smoke tests + קובץ הקונטקסט. ה
 
 - כל ה-smoke tests עוברים.
 - אתם יכולים להגן על כל קובץ ב-repo אם נשאלתם "למה זה כתוב ככה".
-- המנטור ראה את היסטוריית ה-prompts.
+- החופף ראה את היסטוריית ה-prompts.
 
 ## למעבר הלאה
 

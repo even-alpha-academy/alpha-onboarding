@@ -1,23 +1,27 @@
 ---
-// Visual of the AI usage-modes ladder. Static; inherits RTL from <html dir="rtl">.
+// Visual of the AI usage-modes ladder. Each rung names the ACTUAL tool and ties to the
+// guardrails the intern really has (.ai-mode / the provenance scan). Static; inherits RTL.
 const modes = [
   {
     name: 'Explainer',
-    when: 'מותר תמיד, מיום 1',
-    desc: 'מסביר קוד, מושג, או שגיאה. מאיץ הלמידה הטוב ביותר.',
+    tool: "צ'אט AI בדפדפן (ChatGPT / Claude / Gemini ב-web)",
+    when: 'מותר תמיד',
+    desc: 'אתה + צ׳אטבוט בדפדפן. שואל, מבין, מאמת. אין לו גישה ל-repo שלך — אתה רק לומד ממנו.',
     state: 'open',
   },
   {
     name: 'Navigator',
-    when: 'משלב 2',
-    desc: 'מאתר דברים ומשרטט גישה — אתם כותבים את הקוד ומגנים על כל שורה.',
+    tool: 'סוכן קוד מקומי, וה-guardrails דלוקים',
+    when: 'ברירת המחדל בתרגילים',
+    desc: 'הסוכן עוזר לאתר ולהסביר בתוך ה-IDE — אבל ה-guardrails חוסמים commit שה-AI כתב, אז הקוד שאתה מגיש הוא שלך.',
     state: 'open',
   },
   {
     name: 'Generator',
-    when: 'בשערים בלבד',
-    desc: 'כותב קוד שאתם סוקרים ומחזיקים באחריות. נרכש, לא ניתן.',
-    state: 'gated',
+    tool: 'סוכן קוד מקומי, ה-guardrails כבויים',
+    when: 'נעול — רק החופף פותח',
+    desc: 'הסוכן כותב קוד שאתה מגיש ומחזיק באחריות. אי אפשר להפעיל לבד — החופף פותח אותו רק אחרי שתוכיח שאתה יודע לבקר קוד ש-AI כתב.',
+    state: 'locked',
   },
 ];
 ---
@@ -25,13 +29,13 @@ const modes = [
 <ol class="mode-ladder">
   {modes.map((m, i) => (
     <li class={m.state}>
-      <span class="rung">{i + 1}</span>
+      <span class="rung">{m.state === 'locked' ? '🔒' : i + 1}</span>
       <div class="body">
         <div class="head">
           <strong>{m.name}</strong>
           <span class="when">{m.when}</span>
-          {m.state === 'gated' && <span class="lock" title="נפתח בשער">🔒</span>}
         </div>
+        <div class="tool">🛠️ {m.tool}</div>
         <p>{m.desc}</p>
       </div>
     </li>
@@ -46,15 +50,21 @@ const modes = [
     border-inline-start: 4px solid var(--sl-color-accent);
     border-radius: 0.5rem; padding: 0.7rem 0.9rem;
   }
-  .mode-ladder li.gated { border-inline-start-color: var(--sl-color-orange); opacity: 0.95; }
+  .mode-ladder li.locked {
+    border-inline-start-color: var(--sl-color-red);
+    border-style: dashed;
+    background: var(--sl-color-gray-6);
+  }
   .rung {
     flex-shrink: 0; width: 1.9rem; height: 1.9rem; border-radius: 50%;
     display: grid; place-items: center; font-weight: 700;
     background: var(--sl-color-accent-low); color: var(--sl-color-accent-high);
   }
-  .gated .rung { background: var(--sl-color-orange-low); color: var(--sl-color-orange-high); }
-  .body { display: grid; gap: 0.15rem; }
+  .locked .rung { background: var(--sl-color-red-low); }
+  .body { display: grid; gap: 0.2rem; }
   .head { display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap; }
   .when { font-size: 0.8rem; color: var(--sl-color-gray-3); }
+  .locked .when { color: var(--sl-color-red-high); font-weight: 600; }
+  .tool { font-size: 0.85rem; color: var(--sl-color-gray-2); }
   .mode-ladder p { margin: 0; font-size: 0.95rem; }
 </style>

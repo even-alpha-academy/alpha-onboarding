@@ -54,25 +54,25 @@ Compose UI ──► ViewModel ──► Repository ──► ApiClient (OkHttp 
 | Backend | 2 (נעשה בשלב 1) | [backend עם agent](/alpha-onboarding/final-project/backend/) | שרת רץ + seed |
 | התחברות | 3 / 3 | [שלב 1](/alpha-onboarding/final-project/login/) | MR #1 |
 | מפה עם Skyline | 5 / 4 | [שלב 2](/alpha-onboarding/final-project/map-skyline/) | MR #2 |
-| תיעוד והיסטוריה | 4 / 2–3 | [שלב 3](/alpha-onboarding/final-project/logging-history/) | MR #3 → שער 2 |
+| תיעוד והיסטוריה | 4 / 2–3 | [שלב 3](/alpha-onboarding/final-project/logging-history/) | MR #3 → מבחן מדרגה 2 |
 | הרחבות | אופציונלי | [הרחבות](/alpha-onboarding/final-project/extensions/) | לפי בחירה |
 
-כל שלב נגמר ב-MR שהמנטור סוקר **לפני** שמתחילים את הבא. ה-MRים צריכים להיות קטנים מספיק לסקירה תוך פחות מ-30 דקות — וזה גשר לנורמת הצוות: גודל ה-MR נבדק אוטומטית ב-CI בריפו האמיתי (`check-pr-size.sh`).
+כל שלב נגמר ב-MR שהחופף סוקר **לפני** שמתחילים את הבא. ה-MRים צריכים להיות קטנים מספיק לסקירה תוך פחות מ-30 דקות — וזה גשר לנורמת הצוות: גודל ה-MR נבדק אוטומטית ב-CI בריפו האמיתי (`check-pr-size.sh`).
 
 ## כללי AI בפרויקט הגמר
 
-[סולם המצבים](/alpha-onboarding/working-with-ai/principles/#סולם-המצבים) חל במלואו: Explainer ו-Navigator תמיד; **Generator** לפי החלטת המנטור בשער 1, ו**לעולם לא** עבור קוד ה-wrapper של TerraExplorer (ראו [שלב המפה](/alpha-onboarding/final-project/map-skyline/) למה).
+[סולם המצבים](/alpha-onboarding/working-with-ai/principles/#סולם-המצבים) חל במלואו: Explainer ו-Navigator תמיד; **Generator** לפי החלטת החופף במבחן מדרגה 1, ו**לעולם לא** עבור קוד ה-wrapper של TerraExplorer (ראו [שלב המפה](/alpha-onboarding/final-project/map-skyline/) למה).
 
 ## אם אתם שניים
 
-אותו מפרט, נבנה באופן עצמאי. לפני שהמנטור סוקר, **אתם סוקרים זה את ה-MR של זה** (הסוקר מתחלף). אל תשתפו קוד — כן שתפו סיפורי-מלחמה של דיבוג. הסקירה ההדדית היא חלק מהלמידה.
+אותו מפרט, נבנה באופן עצמאי. לפני שהחופף סוקר, **אתם סוקרים זה את ה-MR של זה** (הסוקר מתחלף). אל תשתפו קוד — כן שתפו סיפורי-מלחמה של דיבוג. הסקירה ההדדית היא חלק מהלמידה.
 
-## הגדרת סיום (שער 2)
+## הגדרת סיום (מבחן מדרגה 2)
 
 - כל שלושת MR-השלבים מוזגו.
 - דמו של האפליקציה: התחברות → מפה → הקשה על שטח → תיעוד תרגול → צפייה בהיסטוריה.
 - הטסטים ירוקים.
-- מחוון המנטור מסופק.
+- מחוון החופף מסופק.
 
 ## למעבר הלאה
 
