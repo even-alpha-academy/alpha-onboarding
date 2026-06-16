@@ -7,6 +7,7 @@ title: "סודות ושתי רשתות"
 ## שתי רשתות, מקור אחד
 
 ```mermaid
+%%{init: {'flowchart': {'rankSpacing': 170}}}%%
 flowchart RL
     GH["GitHub · open · full history · PRs"]
     CN["Closed network · real assets + secrets"]
