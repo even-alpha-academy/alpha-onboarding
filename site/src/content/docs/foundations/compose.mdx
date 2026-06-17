@@ -40,7 +40,7 @@ import VideoLink from '../../../components/VideoLink.astro';
 
 ```kotlin
 @Composable
-fun Greeting(name: String, onClick: () -> Unit) {   // stateless: props נכנסים, event יוצא
+fun Greeting(name: String, onClick: () -> Unit) {   // stateless: props in, event out
     Text(
         text = "שלום $name",
         modifier = Modifier
@@ -75,7 +75,7 @@ LazyColumn {
 ```kotlin
 @Composable
 fun SettingsRoute(vm: SettingsViewModel) {
-    val state by vm.state.collectAsState()      // כל עדכון state → recomposition
+    val state by vm.state.collectAsState()      // every state update → recomposition
     Settings(displayName = state.displayName, onLogout = vm::logout)
 }
 ```

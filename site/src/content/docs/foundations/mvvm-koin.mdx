@@ -146,13 +146,13 @@ fun NavGraphBuilder.settingsRoute() {
 ```kotlin
 @Test
 fun `Change text input fetch search results after debounce`() = runTest {
-    searchVM.onInputTextChange("ss")                          // 1. מפעילים אירוע
+    searchVM.onInputTextChange("ss")                          // 1. fire an event
 
-    assertIs<SearchMode.Basic.Loading>(searchVM.state.value.searchMode)  // 2. state ביניים
+    assertIs<SearchMode.Basic.Loading>(searchVM.state.value.searchMode)  // 2. intermediate state
 
-    advanceUntilIdle()                                        // 3. מריצים את ה-debounce
+    advanceUntilIdle()                                        // 3. run the debounce
 
-    assertEquals(                                             // 4. בודקים את ה-state הסופי
+    assertEquals(                                             // 4. assert the final state
         desiredTitleList,
         (searchVM.state.value.searchMode as SearchMode.Basic.Loaded).results.map { it.title },
     )

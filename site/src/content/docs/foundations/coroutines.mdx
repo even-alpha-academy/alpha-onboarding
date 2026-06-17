@@ -36,14 +36,14 @@ import VideoLink from '../../../components/VideoLink.astro';
 // Kotlin
 suspend fun loadUser(id: String): User { ... }
 
-// TypeScript המקביל
+// the TypeScript equivalent
 async function loadUser(id: string): Promise<User> { ... }
 ```
 
 ההבדל בקריאה: ל-`suspend fun` קוראים **רק** מתוך coroutine אחרת או מתוך `suspend fun` אחרת. אין `.then()` ואין `await` — פשוט קוראים לה, והיא נראית סינכרונית אבל לא חוסמת:
 
 ```kotlin
-val user = loadUser(id)   // נראה סינכרוני, לא חוסם thread
+val user = loadUser(id)   // looks synchronous, doesn't block the thread
 ```
 
 ## scopes ומבנה
@@ -65,7 +65,7 @@ viewModelScope.launch {
 ```kotlin
 val a = async { loadA() }
 val b = async { loadB() }
-val combined = a.await() + b.await()   // A ו-B רצו במקביל
+val combined = a.await() + b.await()   // A and B ran in parallel
 ```
 
 **ביטול מתפשט:** אם תבטלו (או תיכשל) coroutine-אב, כל הילדים מבוטלים. הביטול הוא **שיתופי** — קוד שמחשב הרבה צריך לבדוק `isActive` או לקרוא ל-`suspend` שמכבדת ביטול.
@@ -83,7 +83,7 @@ val combined = a.await() + b.await()   // A ו-B רצו במקביל
 מעבירים thread עם `withContext`:
 
 ```kotlin
-val data = withContext(dispatchers.io) { readBigFile() }  // רץ על IO, חוזר ל-caller
+val data = withContext(dispatchers.io) { readBigFile() }  // runs on IO, returns to caller
 ```
 
 > **גשר:** ה-Main thread הוא ה-UI thread — חסימה שלו = jank (מסך תקוע). בדפדפן לא הייתה לכם הבחירה הזו לעשות; כאן צריך להחליט במודע איפה כל פעולה רצה. (בקוד של הצוות מזריקים `DispatchersProvider` במקום לקרוא ל-`Dispatchers.IO` ישירות — כדי שאפשר יהיה להחליף אותם בטסטים.)
@@ -118,7 +118,7 @@ ticker.map { it * 2 }.filter { it > 4 }.take(3).collect { println(it) }
 
 ```kotlin
 private val _state = MutableStateFlow(ScreenState())
-val state: StateFlow<ScreenState> = _state          // immutable כלפי חוץ
+val state: StateFlow<ScreenState> = _state          // immutable to the outside
 
 fun onClick() = _state.update { it.copy(count = it.count + 1) }
 ```
@@ -132,8 +132,8 @@ fun onClick() = _state.update { it.copy(count = it.count + 1) }
 ```kotlin
 @Test
 fun example() = runTest {
-    vm.onInputTextChange("ss")        // משיק עבודה עם debounce
-    advanceUntilIdle()                // "מריץ" את כל הזמן התלוי
+    vm.onInputTextChange("ss")        // launches debounced work
+    advanceUntilIdle()                // "runs" all the pending virtual time
     assertIs<Loaded>(vm.state.value.searchMode)
 }
 ```
