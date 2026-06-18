@@ -12,14 +12,14 @@ title: "שלב 2 — מפה עם Skyline"
 
 ה-SDK הוא AAR שמגיע מוטמע (vendored). מתוך ה-clone של alpha-mobile:
 
-1. העתיקו את `map/terraexplorer/libs/TerraExplorerAndroidModule.aar` (כ-53MB) אל `app/libs/` בפרויקט פרויקט הגמר.
+1. העתיקו את `map/terraexplorer/libs/TerraExplorerAndroidModule.aar` (כ-51MB) אל `app/libs/` בפרויקט פרויקט הגמר.
 2. ב-Gradle:
    ```kotlin
    implementation(files("libs/TerraExplorerAndroidModule.aar"))
    ```
 3. העתיקו את נכסי השטח `Default.fly` ו-`Default_Local_Terrain.mpt` מ-`map/terraexplorer/src/main/assets/` אל ה-assets שלכם.
 
-אין קריאת license, אין חשבון, הכל offline. ה-AAR כבר committed בריפו הפתוח — אין חשיפה חדשה.
+אין קריאת license, אין חשבון, הכל offline. ה-AAR כבר committed בריפו הפתוח — אין חשיפה חדשה. (חיווט ה-SDK תלוי-רשת: בצד הסגור הוא נפתר ממאגר Maven פנימי כ-`com.skyline:terraexplorer`; בצד הפתוח — מה שאתם מקבלים — זה ה-AAR המוטמע. אותו SDK, שני מקורות.)
 
 > **בינארי גדול:** אם ריפו פרויקט הגמר על GitHub, אפשר פשוט ל-commit אותו (מתחת ל-100MB זה תקין) או להשתמש ב-Git LFS.
 

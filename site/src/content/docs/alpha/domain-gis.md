@@ -23,7 +23,7 @@ alpha-mobile נושאת את הספרייה **Proj4j** (`org.locationtech.proj4j
 
 שלישיית השכבות ששמות ה-wrapper בקוד כבר רמזו עליה (`TrackRasterLayer` / `TrackFeatureLayer` / `TrackElevationLayer`):
 
-- **Raster** — אריחי תמונה (imagery/tiles). פרוטוקול נפוץ: **WMTS** (מפתחי `alpha.*WmtsUrl` ב-`gradle.properties` הם בדיוק כתובות ה-WMTS). תחשבו עליה כעל "תמונת רקע מרוצפת".
+- **Raster** — אריחי תמונה (imagery/tiles). פרוטוקול נפוץ: **WMTS** (מפתחי `alpha.*WmtsUrl` שב-`local.properties` הם בדיוק כתובות ה-WMTS). תחשבו עליה כעל "תמונת רקע מרוצפת".
 - **Vector / Feature** — גאומטריות + מאפיינים. **Feature = geometry + properties** — גשר: זה בדיוק GeoJSON שאתם מכירים מה-web (נקודה/קו/פוליגון, ועליו מאפיינים).
 - **Elevation / Terrain** — נתוני גובה. ה-`.mpt` שהעתקתם בפרויקט הגמר? זו שכבת ה-terrain — עכשיו זה מקבל משמעות.
 

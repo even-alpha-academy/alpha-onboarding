@@ -55,12 +55,12 @@ flowchart TB
 
 ## שלבי הבנייה
 
-| שלב | ימים (core / fast) | מסמך | תוצר |
+| שלב | ימים | מסמך | תוצר |
 |---|---|---|---|
 | Backend | 2 (נעשה בשלב 1) | [backend עם agent](/alpha-onboarding/final-project/backend/) | שרת רץ + seed |
-| התחברות | 3 / 3 | [שלב 1](/alpha-onboarding/final-project/login/) | MR #1 |
-| מפה עם Skyline | 5 / 4 | [שלב 2](/alpha-onboarding/final-project/map-skyline/) | MR #2 |
-| תיעוד והיסטוריה | 4 / 2–3 | [שלב 3](/alpha-onboarding/final-project/logging-history/) | MR #3 ← מבחן מדרגה 2 |
+| התחברות | 3 | [שלב 1](/alpha-onboarding/final-project/login/) | MR #1 |
+| מפה עם Skyline | 5 | [שלב 2](/alpha-onboarding/final-project/map-skyline/) | MR #2 |
+| תיעוד והיסטוריה | 4 | [שלב 3](/alpha-onboarding/final-project/logging-history/) | MR #3 ← מבחן מדרגה 2 |
 | הרחבות | אופציונלי | [הרחבות](/alpha-onboarding/final-project/extensions/) | לפי בחירה |
 
 כל שלב נגמר ב-MR שהחופף סוקר **לפני** שמתחילים את הבא. ה-MRים צריכים להיות קטנים מספיק לסקירה תוך פחות מ-30 דקות — וזה גשר לנורמת הצוות: גודל ה-MR נבדק אוטומטית ב-CI בריפו האמיתי (`check-pr-size.sh`).

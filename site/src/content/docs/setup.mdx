@@ -65,7 +65,7 @@ import Checklist from '../../components/Checklist.astro';
 ./scripts/setup-clone.sh
 ```
 
-הסקריפט מגדיר `core.hooksPath=.githooks` ו-`core.autocrlf=false`, ומפעיל את ה-git hooks. הוא **חובה** ומריצים אותו פעם אחת לכל clone. מה שהוא בעצם עושה: מתקין hook מסוג `pre-push` שסורק תוכן רגיש לפני כל push. כרגע פשוט הריצו אותו וסמכו עליו — הסיפור המלא של מודל שתי הרשתות והדיסציפלינת-סודות מחכה ב[סודות ורשתות](/alpha-onboarding/alpha/secrets-networks/).
+הסקריפט מגדיר `core.hooksPath=.githooks` ו-`core.autocrlf=false` (כדי לכבד את `.gitattributes` ולא לדרוס סופי-שורה), פעם אחת לכל clone. לגבי תוכן רגיש: הסורק `scripts/internal/scan-sensitive.sh` הוא המנוע, והוא **נאכף ב-CI** בכל push (אפשר גם להריץ אותו ידנית). הסיפור המלא של מודל שתי הרשתות והדיסציפלינת-סודות מחכה ב[סודות ורשתות](/alpha-onboarding/alpha/secrets-networks/).
 
 ### ריפו ייעודי לכל תרגיל
 
@@ -85,7 +85,7 @@ import Checklist from '../../components/Checklist.astro';
 ./gradlew assembleDevDebug
 ```
 
-מה בדיוק בניתם? את ה-flavor החיצוני/mock של האפליקציה. המפתח `alpha.connectivity` ריק ב-`gradle.properties`, ולכן הבילד מתקמפל מול `src/external` — קוד מדומה (mocks), assets-stub, בלי keystores ובלי שרתים אמיתיים. זו בדיוק הסביבה שמיועדת לכם בצד הפתוח, ואין בה שום חשיפה.
+מה בדיוק בניתם? את ה-flavor `dev` עם connectivity **external** — ברירת המחדל של הצד הפתוח. ה-flavor (ממד `environment`: dev/staging/production) וה-connectivity הם **שני דברים נפרדים**: ה-connectivity נקרא מהמאפיין `alpha.connectivity` שב-`local.properties` (קובץ gitignored, ולכן לא קיים אצלכם), וכשהוא חסר הבילד נופל ל-`external` ומתקמפל מול `src/external` — קוד מדומה (mocks), assets-stub, `BuildConfig.IS_EXTERNAL = true`, בלי keystores ובלי שרתים אמיתיים. זו בדיוק הסביבה שמיועדת לכם בצד הפתוח, ואין בה שום חשיפה.
 
 התקינו את ה-APK על מכשיר היעד, התחברו דרך זרימת ה-mock, והסתכלו על המפה. **התוצאה המצופה: אפליקציה שרצה.**
 
@@ -109,7 +109,7 @@ import Checklist from '../../components/Checklist.astro';
   items={[
     'כל הכלים מותקנים ומאומתים (<code>--version</code>): Android Studio + SDK 28–35, JDK 21, git, Node LTS, MongoDB.',
     'שני הריפואים משוכפלים מקומית.',
-    '<code>./scripts/setup-clone.sh</code> רץ ב-alpha-mobile (ה-hooks מותקנים).',
+    '<code>./scripts/setup-clone.sh</code> רץ ב-alpha-mobile (ה-git config מוגדר).',
     'מכשיר היעד נבחר ועובד (<code>adb devices</code> מציג אותו / ה-AVD עולה).',
     '<code>./gradlew assembleDevDebug</code> נבנה והאפליקציה רצה על מכשיר היעד.',
     'דרישות ה-backend מאומתות: <code>node --version</code>, ו-MongoDB עולה מקומית.',

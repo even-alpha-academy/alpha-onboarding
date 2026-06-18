@@ -88,6 +88,12 @@ val data = withContext(dispatchers.io) { readBigFile() }  // runs on IO, returns
 
 > **גשר:** ה-Main thread הוא ה-UI thread — חסימה שלו = jank (מסך תקוע). בדפדפן לא הייתה לכם הבחירה הזו לעשות; כאן צריך להחליט במודע איפה כל פעולה רצה. (בקוד של הצוות מזריקים `DispatchersProvider` במקום לקרוא ל-`Dispatchers.IO` ישירות — כדי שאפשר יהיה להחליף אותם בטסטים.)
 
+## תרגיל — קורוטינות וביטול
+
+קובץ scratch של JVM מספיק. כתבו `suspend fun` ש"שולפת" שני משאבים מדומים במקביל (`async`) ומשלבת אותם. עטפו ב-`withTimeout(2000)` והדפיסו הוכחה שהביטול התפשט (למשל הדפסה בתוך `finally`, או תפיסת `CancellationException`).
+
+> **הגדרת סיום:** התרגיל רץ, ואתם יכולים לענות "מי מבטל את הקורוטינה הזו, ומתי" על **כל** coroutine שהשקתם.
+
 ## Flow
 
 `Flow<T>` הוא **stream קר** — תחשבו עליו כעל async generator, או Observable מינימלי:
@@ -140,20 +146,16 @@ fun example() = runTest {
 
 זו רק הצורה — הטסטינג המלא מגיע ב[תרגיל ה-MVVM](/alpha-onboarding/foundations/mvvm-koin/). דוגמה אמיתית: `app/src/test/java/com/even/alpha/test/core/ui/search/SearchViewModelTest.kt`.
 
+## תרגיל — Flow ו-StateFlow
+
+בנו `Flow<Int>` מסוג ticker, הפעילו עליו `map` + `filter`, ואספו אותו לתוך `MutableStateFlow`. אמתו את הערך האחרון. אחר כך הסבירו (לחופף, או בהערה) **למה `StateFlow` השמיט ערכי ביניים** — זהו רמז: conflation. זו נקודת ה-aha של המסמך.
+
+> **הגדרת סיום:** ה-Flow מתרנדר לתוך ה-`StateFlow`, ואתם יכולים להסביר במילים שלכם מה זה conflation ולמה ערכי ביניים נבלעו.
+
 ## קריאת חובה
 
 - [Coroutines basics](https://kotlinlang.org/docs/coroutines-basics.html), [Cancellation and timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html), ו-[Asynchronous Flow](https://kotlinlang.org/docs/flow.html) ב-kotlinlang.org.
 - [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow) ב-developer.android.com.
-
-## תרגילים
-
-**א. concurrency וביטול (קובץ scratch של JVM):**
-כתבו `suspend fun` ש"שולפת" שני משאבים מדומים במקביל (`async`) ומשלבת אותם. עטפו ב-`withTimeout(2000)` והדפיסו הוכחה שהביטול התפשט (למשל הדפסה בתוך `finally` או תפיסת `CancellationException`).
-
-**ב. Flow:**
-בנו `Flow<Int>` מסוג ticker, הפעילו עליו `map` + `filter`, ואספו אותו לתוך `MutableStateFlow`. אמתו את הערך האחרון. אחר כך הסבירו (לחופף, או בהערה) **למה `StateFlow` השמיט ערכי ביניים** — זהו רמז: conflation. זו נקודת ה-aha של המסמך.
-
-**הגדרת סיום:** שני התרגילים רצים, ואתם יכולים לענות "מי מבטל את הקורוטינה הזו ומתי" על כל coroutine שהשקתם.
 
 ## למעבר הלאה
 

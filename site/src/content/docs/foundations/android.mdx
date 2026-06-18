@@ -42,7 +42,7 @@ import VideoLink from '../../../components/VideoLink.astro';
 - **Product flavors** — לאלפא יש מימד `environment` עם שלושה flavors: `dev` / `staging` / `production`, כל אחד × `debug`/`release`. כל שילוב מייצר אפליקציה עם קונפיגורציה משלו.
 - **`BuildConfig` fields** — ערכים שנקבעים בזמן קומפילציה ונגישים בקוד כ-`BuildConfig.X`. למשל `BuildConfig.IS_EXTERNAL`.
 
-> **גשר:** flavors ו-`BuildConfig` ≈ קובצי `.env` שנפתרים בזמן קומפילציה. המקרה האמיתי אצלנו: מפתחי `alpha.*` ב-`gradle.properties` (שראיתם ביום 0) מוזרקים לתוך `BuildConfig` ושולטים אם הבילד מתחבר ל-mocks או לאמיתי.
+> **גשר:** flavors ו-`BuildConfig` ≈ קובצי `.env` שנפתרים בזמן קומפילציה. המקרה האמיתי אצלנו: המאפיין `alpha.connectivity` (ועוד ערכי `alpha.*`, מוזרקים מ-`local.properties` בצד הסגור) נכנס ל-`BuildConfig` — למשל `BuildConfig.IS_EXTERNAL` — ושולט אם הבילד מתחבר ל-mocks או לאמיתי.
 
 ## הרשאות בזמן ריצה
 
