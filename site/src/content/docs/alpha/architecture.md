@@ -57,14 +57,14 @@ flowchart TB
 
 ## תרגיל ה-CLAUDE.md (המרכזי)
 
-קראו את `CLAUDE.md` של alpha-mobile מההתחלה לסוף — עכשיו, כשהכל אומר משהו. אחר כך, הציד: עבור **כל אחד** מארבעת כללי ה-"Common Pitfalls":
+קראו את `CLAUDE.md` של alpha-mobile מההתחלה לסוף — עכשיו, כשכל מילה אומרת משהו. אחר כך, הציד: עבור **כל אחד** מארבעת כללי הצוות הבאים (מתוך **§5 Conventions** ו-**§2 Modules** ב-`CLAUDE.md`):
 
-1. אל תחשפו `MutableStateFlow`.
-2. אל תשתמשו בניווט מבוסס-מחרוזות.
-3. אל תאתחלו Koin מחוץ ל-`App.kt`.
-4. הוסיפו תמיד כללי ProGuard לספריות עם reflection/serialization.
+1. **`MutableStateFlow` פרטי** — ה-ViewModel חושף החוצה `StateFlow` בלבד.
+2. **ניווט typed דרך `Route`** (sealed) — אף פעם לא ניווט מבוסס-מחרוזות.
+3. **Koin מאותחל רק ב-`App.kt`** (החיווט עצמו ב-`AppModule`/`CoreModule`/`FeatureModule`).
+4. **לעולם לא `Dispatchers.IO` ישירות** — מזריקים `DispatchersProvider` וקוראים `withContext(dispatchers.io)`.
 
-מצאו: **(א)** מקום אחד בקוד שמקיים את הכלל (עם נתיב), ו**(ב)** נסו למצוא הפרה אחת או מקרה-גבול כלשהו (בדרך כלל יש לפחות אחד — `grep` מותר, AI במצב Navigator מותר). רמז למקרה-גבול אמיתי: שימו לב ל-`KoinComponent` ב-`SearchViewModelImpl`/`SearchRepositoryImpl` לעומת ההמלצה ב-`CLAUDE.md`. כתבו את הממצאים כהערה קצרה / gist לסקירת החופף.
+מצאו: **(א)** מקום אחד בקוד שמקיים את הכלל (עם נתיב), ו**(ב)** נסו למצוא הפרה אחת או מקרה-גבול כלשהו (בדרך כלל יש לפחות אחד — `grep` מותר, AI במצב Navigator מותר). רמז למקרי-גבול אמיתיים: חפשו קריאה ישירה ל-`Dispatchers.IO`/`Dispatchers.Default` (במקום דרך `DispatchersProvider`), או `import com.skyline.*` מחוץ למודול `:map:terraexplorer` — §2/§6 אוסרים את שניהם. כתבו את הממצאים כהערה קצרה / gist לסקירת החופף.
 
 **הגדרת סיום:** 4 דוגמאות חיוביות עם נתיבים + לפחות מקרה-גבול אמיתי אחד, מנומק.
 

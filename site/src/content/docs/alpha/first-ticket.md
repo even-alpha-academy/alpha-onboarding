@@ -37,6 +37,7 @@ title: "המשימה האמיתית הראשונה"
 - ה-`CLAUDE.md` כבר שם ומנחה את הכלי.
 - **Generator** — לפי הסטטוס שנפתח לכם.
 - תיאור ה-MR **מצהיר על שימוש ב-AI**, בדיוק כמו שתרגלתם ב[שלב 3 של פרויקט הגמר](/alpha-onboarding/final-project/logging-history/).
+- **אל תוסיפו `Co-Authored-By: Claude` ל-commits ב-alpha-mobile** — §8 ב-`CLAUDE.md` מתייחס ל-trailer הזה כהתחזות בריפו הזה. ההצהרה על שימוש ב-AI הולכת בתיאור ה-MR, לא בהיסטוריית ה-git.
 
 ## יום 26: דמו ורטרו
 

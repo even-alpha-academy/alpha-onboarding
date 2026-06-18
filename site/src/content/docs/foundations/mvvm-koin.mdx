@@ -120,7 +120,7 @@ val searchModule = module {
 
 > **כללי הצוות:**
 > - רשמו כל תלות במודול הנכון (core מול feature).
-> - **אין `KoinComponent` בקוד production** — העדיפו constructor injection. (תראו `KoinComponent` בכמה מקומות ישנים כמו `SearchViewModelImpl` — זה בדיוק החריג שה-`CLAUDE.md` ממליץ להימנע ממנו; אל תחקו אותו בקוד חדש.)
+> - **אין `KoinComponent` בקוד production** — העדיפו constructor injection (תבנית ה-DI של הצוות לפי §5 ב-`CLAUDE.md`: `viewModelOf(::Impl) bind Interface`). (תראו `KoinComponent` בכמה מקומות ישנים כמו `SearchViewModelImpl` — חריג שמנוגד לתבנית; אל תחקו אותו בקוד חדש.)
 > - ב-route, מקבלים את ה-ViewModel דרך `koinViewModel<>()`.
 
 ## ניווט
@@ -165,7 +165,7 @@ fun `Change text input fetch search results after debounce`() = runTest {
 
 - [ViewModel overview](https://developer.android.com/topic/libraries/architecture/viewmodel) ב-developer.android.com.
 - [Koin definitions](https://insert-koin.io/docs/reference/koin-core/definitions/) — `single` / `factory` / `viewModelOf`.
-- וקראו **שוב** את החלק "Architecture Patterns" ב-`CLAUDE.md` של alpha-mobile — עכשיו, כשכל מילה בו אומרת משהו.
+- וקראו **שוב** את **§5 Conventions** (ו-§2 Modules) ב-`CLAUDE.md` של alpha-mobile — עכשיו, כשכל מילה בו אומרת משהו.
 
 ## תרגיל
 
