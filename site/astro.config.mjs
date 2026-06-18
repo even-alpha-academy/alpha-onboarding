@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import mermaid from 'astro-mermaid';
+import sitemap from '@astrojs/sitemap';
 
 // NOTE: `site` and `base` are set for GitHub Pages project-site hosting.
 // Adjust `base` to '/' if served from a custom domain / org root.
@@ -9,6 +10,9 @@ export default defineConfig({
   site: 'https://even-alpha-academy.github.io',
   base: '/alpha-onboarding',
   integrations: [
+    // Sitemap with the gated mentor area filtered out (so the URLs aren't advertised).
+    // Declared explicitly so Starlight uses this config instead of auto-adding its own.
+    sitemap({ filter: (page) => !page.includes('/mentor/') }),
     // Diagrams: ```mermaid blocks → SVG, client-side. Brand-tuned dark theme. MUST be before starlight.
     mermaid({
       theme: 'dark',

@@ -2,7 +2,8 @@ name: Deploy onboarding site to GitHub Pages
 
 # Builds the Astro Starlight site in ./site and publishes to GitHub Pages.
 # The repo is private; the published Pages site is public (content is unclassified-generic).
-# Works on the org's Team+ plan (access-controlled private Pages would need Enterprise).
+# The /mentor/* pages are StatiCrypt-encrypted (password from the MENTOR_DOCS_PASSWORD secret)
+# AFTER the build and BEFORE upload, so only ciphertext is ever published.
 
 on:
   push:
@@ -17,7 +18,6 @@ permissions:
   pages: write
   id-token: write
 
-# Allow one concurrent deployment; don't cancel an in-progress run.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -28,11 +28,48 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build with Astro
-        uses: withastro/action@v6
+      - name: Setup Node
+        uses: actions/setup-node@v6
         with:
-          path: ./site
           node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install dependencies
+        working-directory: ./site
+        run: npm ci
+      - name: Build site
+        working-directory: ./site
+        run: npm run build
+      - name: Encrypt mentor pages (StatiCrypt)
+        working-directory: ./site/dist
+        env:
+          STATICRYPT_PASSWORD: ${{ secrets.MENTOR_DOCS_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "${STATICRYPT_PASSWORD:-}" ]; then
+            echo "::warning::MENTOR_DOCS_PASSWORD secret is not set — dropping /mentor from this deploy (no plaintext is published). Set the repo Actions secret and re-deploy to publish the mentor pages encrypted."
+            rm -rf mentor
+            exit 0
+          fi
+          npx --yes staticrypt@3.5.4 mentor -r -d enc -c false --short \
+            -s 7f3a9c1e8b5d2406af71e9d3c0b6428a \
+            --remember 30 \
+            --template-title "מסמכי חופף — מוגן" \
+            --template-button "כניסה" \
+            --template-instructions "הזינו את סיסמת החופף כדי לצפות במסמכים." \
+            --template-color-primary "#56b8ff" \
+            --template-color-secondary "#0b1018"
+          rm -rf mentor && mv enc/mentor mentor && rm -rf enc
+          # Fail closed: never publish if a known plaintext marker survived.
+          if grep -rqs "even-alpha-academy/<template>" mentor/; then
+            echo "::error::Mentor pages still contain plaintext after encryption — aborting."
+            exit 1
+          fi
+          echo "Mentor pages encrypted."
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site/dist
 
   deploy:
     needs: build

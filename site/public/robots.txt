@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /alpha-onboarding/mentor/
+
+Sitemap: https://even-alpha-academy.github.io/alpha-onboarding/sitemap-index.xml

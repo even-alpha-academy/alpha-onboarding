@@ -1,0 +1,66 @@
+---
+layout: ../../layouts/MentorLayout.astro
+title: "כלי החופף"
+---
+import script from '../../mentor-ops/provision-intern.sh?raw';
+
+# כלי החופף
+
+שני כלים תפעוליים. שניהם רצים מ**המכונה שלך** עם ה-`gh` שלך — האתר הזה לא מריץ כלום (אין לו, ואסור שיהיה לו, טוקן אדמין). הסקריפט המלא מופיע למטה: אפשר להעתיק אותו מכאן, או למשוך אותו מהריפו (`site/src/mentor-ops/provision-intern.sh`).
+
+## 1. הקצאת repo לנחפף (provisioning)
+
+> **למה לא GitHub Classroom?** GitHub סוגרת את Classroom (אין הרשמות חדשות מ-מאי 2026, כיבוי מלא אוגוסט 2026). במקום זה אנחנו עובדים **בתוך הארגון** עם template repos ופקודת `gh` אחת לנחפף — בלי שירות חיצוני, בלי שקוד של נחפף עוזב את הארגון.
+
+**הכנה חד-פעמית (כבר בוצעה בהקמת הארגון):** `base-permission=None` (נחפף לא רואה repo פרטי שלא צורף אליו ← בידוד מלא), team בשם `mentors`, ותרגילי ה-template מסומנים כ-template repositories.
+
+**לכל נחפף — פקודה אחת** (דורש `gh` מאומת כ-owner של הארגון):
+
+```bash
+gh auth login          # פעם אחת, כ-owner של even-alpha-academy
+./provision-intern.sh <github-username> exercise-gate1 exercise-final-backend final-project-app
+```
+
+מה זה עושה לכל template: יוצר `even-alpha-academy/<template>-<username>` (פרטי) מה-template, נותן לנחפף push ל-repo **שלו בלבד**, ולצוות `mentors` גישת סקירה (דורש `admin:org`; אם חסר — מדלג עם אזהרה, ואתם כבעלים ממילא עם גישה). הבידוד מגיע מ-`base-permission=None`.
+
+**גשר ל-alpha-mobile (read-bridge):** הסקריפט נותן לנחפף read/pull על ה-repo הפתוח/stub של alpha-mobile (דורש admin על `even-alpha/alpha-mobile`; אם אין — מדלג עם אזהרה ומדפיס את הפקודה הידנית). כך הנחפף הוא חבר **רק** ב-`even-alpha-academy` ולא רואה קוד אמיתי, מלבד ה-repo האחד שאישרתם.
+
+> כל ההזמנות (3 repos + alpha-mobile) **ממתינות לאישור הנחפף** לפני שהוא יכול לשכפל.
+
+### הסקריפט המלא
+
+<pre><code>{script}</code></pre>
+
+## 2. הפעלת מצב Generator — הלבֶר
+
+מצב ה-AI של כל repo נשלט ע"י **משתנה repo בשם `AI_MODE`** שרק חופף (admin של ה-repo) יכול להגדיר. הנחפף מקבל push ל-repo שלו — **לא admin** — ולכן **לא יכול לקרוא או לשנות את המשתנה**, וממילא לא יכול לזייף "ירוק" ב-CI. זה הבקר היחיד שחייב להיות חסין-לחבלה; כל השאר הוא הרתעה + שכבת החופף.
+
+> שקיפות מכוונת: הקובץ `.ai-mode` ב-repo של הנחפף נשאר גלוי, וה-`GUARDRAILS.md` מסביר את המנגנון. נחפף שמפענח את זה ועדיין שומר על קצב יומי — זו תכונה טובה, לא בעיה. הלבֶר האמיתי (המשתנה) ממילא מחוץ להישג ידו.
+
+### מתי לפתוח (הסיגנל)
+
+"נרכש, לא ניתן." פותחים כשהנחפף הראה **בסקירות** שהוא מבקר קוד שנוצר: מריץ (לא סומך על "נראה תקין"), בודק מול קובץ המוסכמות, תופס APIs מומצאים, ויכול להגן על כל שורה. ארגז החול של ה-backend הוא המקום שבו הוא מוכיח את זה; נקודות ההחלטה הטבעיות הן **מבחן מדרגה 1** ו**נקודת האמצע**.
+
+### איך (פקודה אחת)
+
+```bash
+# פתיחה (כשהנחפף הרוויח):
+gh variable set AI_MODE --body generator --repo even-alpha-academy/<repo-של-הנחפף>
+
+# נעילה חוזרת:
+gh variable set AI_MODE --body navigator --repo even-alpha-academy/<repo-של-הנחפף>
+```
+
+או דרך ה-UI: ה-repo של הנחפף ← **Settings → Secrets and variables → Actions → Variables** ← `New variable` בשם `AI_MODE` עם הערך `generator`. ברירת מחדל (ללא משתנה) = `navigator`.
+
+### לכל סוג repo
+
+| Repo | מתי לפתוח |
+|---|---|
+| `exercise-gate1-<intern>` | **לעולם לא** — זו נקודת המדידה של מבחן מדרגה 1; הנחפף כותב כל שורה. |
+| `exercise-final-backend-<intern>` | **כבר generator** — זה ארגז החול המפוקח. אין מה לעשות. |
+| `final-project-app-<intern>` | פתחו `generator` **במהלך הקפסטון**, אחרי שהנחפף הראה שיפוט בסקירות (בד"כ אחרי שלב ההתחברות). **לעולם לא** לקוד ה-wrapper של TerraExplorer — שם ה-AI ממציא. |
+
+### שכבת המודעות לסוכנים (agents)
+
+כל repo מכיל `AGENTS.md` + `CLAUDE.md` שמנחים סוכן משתף-פעולה לכבד את המצב (ברירת מחדל: Navigator, אל תכתוב קוד). זו הרתעה לרוב ההגון — לא אכיפה. אכיפה אמיתית = ה-CI (המשתנה) + הסקירה החיה ("הגן על כל שורה").
