@@ -2,8 +2,24 @@
 // Standalone minimal layout for the password-gated mentor pages.
 // Deliberately NOT the Starlight shell: these pages are StatiCrypt-encrypted at build
 // time, and a self-contained page decrypts/renders cleanly with no client-side hydration.
+//
+// Palette is taken from Starlight's actual dark theme (the intern site default) so the
+// gated area feels like the same site: bg = --sl-color-black hsl(224,10%,10%), links =
+// brand --sl-color-accent-high #7fc6ff, surfaces/borders = the 224° gray ramp.
 const { frontmatter } = Astro.props;
 const title = frontmatter?.title ?? 'מסמכי חופף';
+
+// Base-aware hrefs (base = /alpha-onboarding). The mentor pages live in src/pages, so the
+// built URL is `${base}mentor/<page>/`. Highlight the current page in the side nav.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const here = Astro.url.pathname.replace(/\/$/, '');
+const nav = [
+  { href: `${base}/mentor/guide/`, label: 'מדריך לחופף' },
+  { href: `${base}/mentor/checkpoints/`, label: 'נקודות בקרה' },
+  { href: `${base}/mentor/rubrics/`, label: 'מחווני הערכה' },
+  { href: `${base}/mentor/tooling/`, label: 'כלי החופף' },
+];
+const isActive = (href) => here === href.replace(/\/$/, '');
 ---
 
 <!doctype html>
@@ -15,13 +31,15 @@ const title = frontmatter?.title ?? 'מסמכי חופף';
     <title>{title} · חופף</title>
     <style>
       :root {
-        --bg: #0b1018;
-        --panel: #11192444;
-        --text: #e8eef5;
-        --muted: #9fb0c3;
-        --accent: #56b8ff;
-        --border: #24364f;
-        --code-bg: #0e1726;
+        /* Mirrors Starlight's dark theme (style/props.css) so this matches the intern site. */
+        --bg: hsl(224, 10%, 10%);          /* --sl-color-black / --sl-color-bg */
+        --panel: hsl(224, 14%, 16%);       /* --sl-color-gray-6 / sidebar+nav surface */
+        --text: hsl(224, 6%, 77%);         /* --sl-color-gray-2 / --sl-color-text */
+        --text-strong: #fff;               /* --sl-color-white (headings) */
+        --muted: hsl(224, 6%, 56%);        /* --sl-color-gray-3 */
+        --accent: #7fc6ff;                 /* brand --sl-color-accent-high (content links) */
+        --border: hsl(224, 10%, 23%);      /* --sl-color-gray-5 / hairline-light */
+        --code-bg: hsl(224, 10%, 23%);     /* --sl-color-bg-inline-code (gray-5) */
       }
       * { box-sizing: border-box; }
       html { background: var(--bg); }
@@ -32,7 +50,49 @@ const title = frontmatter?.title ?? 'מסמכי חופף';
         font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
         line-height: 1.7;
       }
-      .wrap { max-width: 56rem; margin: 0 auto; padding: 2.5rem 1.25rem 5rem; }
+      .layout {
+        max-width: 64rem;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 5rem;
+        display: flex;
+        gap: 2.5rem;
+        align-items: flex-start;
+      }
+      /* Small in-page nav sidebar. In RTL it sits on the right (first flex child). */
+      .mentor-nav {
+        flex: 0 0 13rem;
+        position: sticky;
+        top: 2rem;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1rem 0.9rem;
+      }
+      .mentor-nav .nav-title {
+        font-size: 0.78rem;
+        letter-spacing: 0.04em;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin: 0 0.3rem 0.7rem;
+      }
+      .mentor-nav ul { list-style: none; margin: 0; padding: 0; }
+      .mentor-nav li { margin: 0.15rem 0; }
+      .mentor-nav a {
+        display: block;
+        padding: 0.4rem 0.6rem;
+        border-radius: 7px;
+        color: var(--text);
+        text-decoration: none;
+        font-size: 0.95rem;
+      }
+      .mentor-nav a:hover { background: var(--bg); color: var(--text-strong); }
+      .mentor-nav a[aria-current='page'] {
+        background: var(--bg);
+        color: var(--accent);
+        font-weight: 600;
+        box-shadow: inset 2px 0 0 var(--accent);
+      }
+      .content { flex: 1 1 auto; min-width: 0; }
       .badge {
         display: inline-block;
         font-size: 0.8rem;
@@ -42,10 +102,10 @@ const title = frontmatter?.title ?? 'מסמכי חופף';
         padding: 0.15rem 0.7rem;
         margin-bottom: 1.5rem;
       }
-      h1, h2, h3 { line-height: 1.3; }
+      h1, h2, h3 { line-height: 1.3; color: var(--text-strong); }
       h1 { font-size: 1.9rem; margin: 0 0 1rem; }
       h2 { font-size: 1.35rem; margin: 2.2rem 0 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
-      h3 { font-size: 1.1rem; margin: 1.6rem 0 0.6rem; color: var(--accent); }
+      h3 { font-size: 1.1rem; margin: 1.6rem 0 0.6rem; }
       a { color: var(--accent); }
       hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
       blockquote {
@@ -78,12 +138,28 @@ const title = frontmatter?.title ?? 'מסמכי חופף';
         text-align: left;
       }
       pre code { background: none; padding: 0; }
+      @media (max-width: 50rem) {
+        .layout { flex-direction: column; gap: 1.5rem; }
+        .mentor-nav { position: static; width: 100%; flex-basis: auto; }
+      }
     </style>
   </head>
   <body>
-    <main class="wrap">
-      <span class="badge">מסמכי חופף · פרטי</span>
-      <slot />
-    </main>
+    <div class="layout">
+      <nav class="mentor-nav" aria-label="ניווט מסמכי חופף">
+        <p class="nav-title">מסמכי חופף</p>
+        <ul>
+          {nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <main class="content">
+        <span class="badge">אזור חופף · פרטי</span>
+        <slot />
+      </main>
+    </div>
   </body>
 </html>

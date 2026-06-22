@@ -95,6 +95,16 @@ export default defineConfig({
             { label: 'משימה ראשונה', link: '/alpha/first-ticket/' },
           ],
         },
+        // Gated mentor area. These pages live in src/pages (not the docs collection) and are
+        // StatiCrypt-encrypted in CI, so the link points at a password gate. `attrs` marks it
+        // visibly as the private area; the link is intentionally discoverable (security rests
+        // on the passphrase, not URL secrecy).
+        {
+          label: 'אזור החופף 🔒',
+          items: [
+            { label: 'מסמכי חופף (מוגן)', link: '/mentor/guide/', attrs: { rel: 'nofollow' } },
+          ],
+        },
       ],
     }),
   ],
