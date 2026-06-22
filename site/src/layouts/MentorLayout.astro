@@ -106,7 +106,9 @@ const isActive = (href) => here === href.replace(/\/$/, '');
       h1 { font-size: 1.9rem; margin: 0 0 1rem; }
       h2 { font-size: 1.35rem; margin: 2.2rem 0 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
       h3 { font-size: 1.1rem; margin: 1.6rem 0 0.6rem; }
-      a { color: var(--accent); }
+      /* Cover :visited too — otherwise visited links fall back to the UA dark-purple. */
+      a, a:visited { color: var(--accent); }
+      a:hover { text-decoration-thickness: 2px; }
       hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
       blockquote {
         margin: 1.2rem 0;

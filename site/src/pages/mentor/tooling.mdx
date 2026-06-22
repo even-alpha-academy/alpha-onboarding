@@ -14,11 +14,15 @@ import script from '../../mentor-ops/provision-intern.sh?raw';
 
 **הכנה חד-פעמית (כבר בוצעה בהקמת הארגון):** `base-permission=None` (נחפף לא רואה repo פרטי שלא צורף אליו ← בידוד מלא), team בשם `mentors`, ותרגילי ה-template מסומנים כ-template repositories.
 
-**לכל נחפף — פקודה אחת** (דורש `gh` מאומת כ-owner של הארגון):
+**איך מריצים (מהמכונה שלך):**
+
+1. העתיקו את [הסקריפט המלא](#הסקריפט-המלא) שלמטה לקובץ בשם `provision-intern.sh` במחשב שלכם (או משכו אותו מהריפו: `site/src/mentor-ops/provision-intern.sh`).
+2. פתחו **Git Bash** (לא PowerShell/CMD) בתיקייה שבה שמרתם את הקובץ.
+3. פעם אחת בלבד: `gh auth login` — התחברו כ-owner של `even-alpha-academy`.
+4. הריצו, **פקודה אחת לכל נחפף**:
 
 ```bash
-gh auth login          # פעם אחת, כ-owner של even-alpha-academy
-./provision-intern.sh <github-username> exercise-gate1 exercise-final-backend final-project-app
+bash provision-intern.sh <github-username> exercise-gate1 exercise-final-backend final-project-app
 ```
 
 מה זה עושה לכל template: יוצר `even-alpha-academy/<template>-<username>` (פרטי) מה-template, נותן לנחפף push ל-repo **שלו בלבד**, ולצוות `mentors` גישת סקירה (דורש `admin:org`; אם חסר — מדלג עם אזהרה, ואתם כבעלים ממילא עם גישה). הבידוד מגיע מ-`base-permission=None`.
@@ -59,7 +63,7 @@ gh variable set AI_MODE --body navigator --repo even-alpha-academy/<repo-של-ה
 |---|---|
 | `exercise-gate1-<intern>` | **לעולם לא** — זו נקודת המדידה של מבחן מדרגה 1; הנחפף כותב כל שורה. |
 | `exercise-final-backend-<intern>` | **כבר generator** — זה ארגז החול המפוקח. אין מה לעשות. |
-| `final-project-app-<intern>` | פתחו `generator` **במהלך הקפסטון**, אחרי שהנחפף הראה שיפוט בסקירות (בד"כ אחרי שלב ההתחברות). **לעולם לא** לקוד ה-wrapper של TerraExplorer — שם ה-AI ממציא. |
+| `final-project-app-<intern>` | פתחו `generator` **במהלך פרויקט הגמר**, אחרי שהנחפף הראה שיפוט בסקירות (בד"כ אחרי שלב ההתחברות). **לעולם לא** לקוד ה-wrapper של TerraExplorer — שם ה-AI ממציא. |
 
 ### שכבת המודעות לסוכנים (agents)
 

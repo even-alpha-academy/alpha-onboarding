@@ -1,26 +1,11 @@
 #!/usr/bin/env bash
-# provision-intern.sh — create a private per-intern exercise repo from a template, in-org.
+# provision-intern.sh — create private per-intern exercise repos from templates, in-org,
+# and wire access: intern push (own repo only), mentors-team review, alpha-mobile read-bridge.
+# Full explanation + how to run it: the "כלי החופף" page on the onboarding site.
 #
-# Replaces GitHub Classroom (sunset Aug 2026). Fully in-org, no external service.
-# Requires: gh authenticated as an org owner/admin with `repo` scope (creating repos + adding the
-# intern). The optional `mentors`-team grant needs `admin:org` — if that scope is missing it's
-# skipped with a warning (you, the owner, already have access; run `gh auth refresh -s admin:org`
-# to enable the team grant for OTHER mentors).
-#
-# Usage:
-#   ./provision-intern.sh <github-username> <template> [<template> ...]
-# Example:
-#   ./provision-intern.sh danacohen exercise-gate1 exercise-final-backend
-#
-# What it does per template:
-#   1. Creates  even-alpha-academy/<template>-<username>  (PRIVATE) from the template repo.
-#   2. Grants the intern PUSH access to *their* repo only.
-#   3. Grants the `mentors` team review (push) access.
-#   4. (alpha-mobile read-bridge) grants the intern read (pull) on the open/stub alpha-mobile
-#      reference repo. Needs admin on even-alpha/alpha-mobile; skipped with a warning otherwise.
-#
-# Isolation comes from the org setting base-permission=None (already set): a member can't see
-# any private repo they weren't explicitly added to — so interns never see each other's work.
+# Usage:   bash provision-intern.sh <github-username> <template> [<template> ...]
+# Example: bash provision-intern.sh danacohen exercise-gate1 exercise-final-backend final-project-app
+# Requires: gh authenticated as an even-alpha-academy owner/admin.
 
 set -euo pipefail
 ORG="even-alpha-academy"
