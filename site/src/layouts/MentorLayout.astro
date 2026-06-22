@@ -29,7 +29,12 @@ const isActive = (href) => here === href.replace(/\/$/, '');
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
     <title>{title} · חופף</title>
-    <style>
+    <!-- is:global so these document styles reach the markdown content rendered via <slot/>.
+         Astro scopes <style> by default, and the slotted markdown carries no scope class, so a
+         scoped block would only style the layout's own nav/badge — leaving content links, tables,
+         code blocks etc. unstyled (links fell back to the UA dark blue/purple). These pages are
+         standalone full documents, so global element rules are safe (no leakage to other pages). -->
+    <style is:global>
       :root {
         /* Mirrors Starlight's dark theme (style/props.css) so this matches the intern site. */
         --bg: hsl(224, 10%, 10%);          /* --sl-color-black / --sl-color-bg */
