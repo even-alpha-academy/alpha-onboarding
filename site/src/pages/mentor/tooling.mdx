@@ -3,6 +3,7 @@ layout: ../../layouts/MentorLayout.astro
 title: "כלי החופף"
 ---
 import script from '../../mentor-ops/provision-intern.sh?raw';
+import { Code } from 'astro:components';
 
 # כלי החופף
 
@@ -33,7 +34,11 @@ bash provision-intern.sh <github-username> exercise-gate1 exercise-final-backend
 
 ### הסקריפט המלא
 
-<pre><code>{script}</code></pre>
+<Code code={script} lang="bash" theme="github-dark" />
+
+<p style="font-size:0.85rem;color:var(--muted);margin-top:0.5rem;">
+  (זהו בדיוק הקובץ <code>site/src/mentor-ops/provision-intern.sh</code> — מקור יחיד, מוצג כאן ישירות.)
+</p>
 
 ## 2. הפעלת מצב Generator — הלבֶר
 
